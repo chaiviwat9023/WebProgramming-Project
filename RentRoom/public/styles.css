@@ -109,7 +109,7 @@ body {
 
 /* ปุ่ม Sign in */
 .sign-in-btn {
-    background: #6366f1;
+    background: #0d6efd;
     /* สีม่วงน้ำเงิน */
     color: white;
     padding: 8px 16px;
@@ -120,7 +120,7 @@ body {
 }
 
 .sign-in-btn:hover {
-    background: #4f46e5;
+    background: #0d6efd;
     /* สีเข้มขึ้นตอน hover */
 }
 
