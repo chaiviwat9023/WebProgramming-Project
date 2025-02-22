@@ -1,24 +1,28 @@
-<!-- views/partials/nav.ejs -->
-<div class="sidebar" id="sidebar">
-  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-  <ul class="menu">
-    <li><a href="/" data-icon="🏠">Home</a></li>
-
-    <li><a href="/choose" data-icon="📁">Choose room</a></li>
-    <li><a href="/" data-icon="⚙️">Settings</a></li>
-    <li><a href="/" data-icon="❓">Help</a></li>
-    <li><a href="/" data-icon="🚪">Logout</a></li>
-  </ul>
-</div>
 
 <!-- Top Bar -->
-<div class="topbar">
-  <div class="logo">LOGO</div>
-
-  <div class="topbar-right">
-    <a href="/login" class="sign-in-btn">Sign in</a>
-    <div class="profile">
-      <img src="/images/1.jpg" alt="Profile Picture" />
+ <nav>
+  <div class="topbar">
+    <div class="logo"></div>
+    <div class="topbar-right">
+      <a href="/login" class="sign-in-btn">Sign in</a>
     </div>
   </div>
-</div>
+
+ </nav>
+ <!-- Side Bar -->
+<aside>
+  <div class="sidebar" id="sidebar">
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <ul class="menu">
+      <li><a href=""><i class="bi bi-bell-fill"></i><span>แจ้งเตือน</span></a></li>
+      <li><a href="/choose"><i class="bi bi-door-closed-fill"></i><span>ห้องเช่า</span></a></li>
+      <li><a href=""><i class="bi bi-envelope-paper-fill"></i><span>ชำระ</span></a></li>
+      <li><a href="/"><i class="bi bi-gear-wide"></i><span>ตั้งค่า</span></a></li>
+    </ul>
+    <div class="profile">
+      <img src="/images/1.jpg" alt="Profile">
+    </div>
+    
+  </div>
+
+</aside>
