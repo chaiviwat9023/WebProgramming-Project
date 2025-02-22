@@ -1,0 +1,128 @@
+<%- include("partials/head") %>
+
+    <body>
+
+        <!-- เรียกใช้ Navbar -->
+        <%- include("partials/nav") %>
+
+            <!-- เนื้อหาแต่ละหน้า -->
+            <div class="container d-flex justify-content-center align-items-center vh-100">
+                <div class="card p-4 shadow-lg" style="width: 400px;">
+                    <h3 class="text-center" id="formTitle">เข้าสู่ระบบ</h3>
+
+                    <!-- ฟอร์ม Login -->
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
+
+                    <!-- ฟอร์ม Register (ซ่อนตอนแรก) -->
+                    <form id="registerForm" style="display: none;">
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter your first name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter your last name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="registerPassword"
+                                placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Submit</button>
+                    </form>
+
+                    <!-- ปุ่มสลับ Login / Register -->
+                    <div class="text-center mt-3">
+                        <p id="toggleText">ยังไม่มีบัญชี? <a href="#" id="toggleForm">สมัครสมาชิก</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const loginForm = document.getElementById("loginForm");
+                    const registerForm = document.getElementById("registerForm");
+                    const toggleForm = document.getElementById("toggleForm");
+                    const formTitle = document.getElementById("formTitle");
+                    const toggleText = document.getElementById("toggleText");
+
+                    // สลับฟอร์ม Login / Register
+                    toggleText.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        if (loginForm.style.display === "none") {
+                            loginForm.style.display = "block";
+                            registerForm.style.display = "none";
+                            formTitle.textContent = "เข้าสู่ระบบ";
+                            toggleText.innerHTML = 'ยังไม่มีบัญชี? <a href="#" id="toggleForm">สมัครสมาชิก</a>';
+                        } else {
+                            loginForm.style.display = "none";
+                            registerForm.style.display = "block";
+                            formTitle.textContent = "สมัครสมาชิก";
+                            toggleText.innerHTML = 'มีบัญชีแล้ว? <a href="#" id="toggleForm">เข้าสู่ระบบ</a>';
+                        }
+                    });
+
+                    // เมื่อกดปุ่ม "เข้าสู่ระบบ"
+                    loginForm.addEventListener("submit", function (event) {
+                        event.preventDefault(); // ป้องกันการรีเฟรชหน้า
+
+                        // รับค่าจากช่องกรอกข้อมูล
+                        const email = document.getElementById("email").value;
+                        const password = document.getElementById("password").value;
+
+                        if (email === "" || password === "") {
+                            alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+                            return;
+                        }
+
+                        // สมมติให้ login สำเร็จ
+                        alert("เข้าสู่ระบบสำเร็จ!");
+                        window.location.href = "/"; // กลับไปหน้า Home
+                    });
+
+                    // เมื่อกดปุ่ม "สมัครสมาชิก"
+                    registerForm.addEventListener("submit", function (event) {
+                        event.preventDefault(); // ป้องกันการรีเฟรชหน้า
+
+                        // รับค่าจากช่องกรอกข้อมูล
+                        const firstName = document.getElementById("firstName").value;
+                        const lastName = document.getElementById("lastName").value;
+                        const registerEmail = document.getElementById("registerEmail").value;
+                        const registerPassword = document.getElementById("registerPassword").value;
+
+                        if (firstName === "" || lastName === "" || registerEmail === "" || registerPassword === "") {
+                            alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+                            return;
+                        }
+
+                        // สมมติว่าสมัครสมาชิกสำเร็จ
+                        alert("สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ");
+                        loginForm.style.display = "block";
+                        registerForm.style.display = "none";
+                        formTitle.textContent = "เข้าสู่ระบบ";
+                        toggleText.innerHTML = 'ยังไม่มีบัญชี? <a href="#" id="toggleForm">สมัครสมาชิก</a>';
+                    });
+                });
+            </script>
+
+
+
+            <%- include("partials/script") %>
+
+    </body>
+
+    </html>

@@ -8,7 +8,6 @@ app.set("views", path.join(__dirname, "views"));
 
 // ตั้งค่า Static Files เช่น CSS, รูปภาพ
 app.use(express.static("public"));
-app.use(express.static(path.join(__dirname, "public")));
 
 // เส้นทางสำหรับแต่ละหน้า
 app.get("/", (req, res) => {
@@ -29,6 +28,10 @@ app.get("/help", (req, res) => {
 
 app.get("/logout", (req, res) => {
     res.send("Logging out...");
+});
+
+app.get("/login", (req, res) => {
+    res.render("login");
 });
 
 // เปิดเซิร์ฟเวอร์

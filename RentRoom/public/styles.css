@@ -62,7 +62,8 @@ body {
 /* เมื่อ Sidebar ย่อ */
 .sidebar.collapsed .menu a {
     text-align: center;
-    font-size: 0; /* ซ่อนข้อความ */
+    font-size: 0;
+    /* ซ่อนข้อความ */
 }
 
 .sidebar.collapsed .menu a::before {
@@ -85,7 +86,8 @@ body {
 
 /* ----------------- Topbar ----------------- */
 .topbar {
-    width: calc(100% - 250px); /* ลดขนาดตาม sidebar */
+    width: calc(100% - 250px);
+    /* ลดขนาดตาม sidebar */
     height: 60px;
     background: white;
     display: flex;
@@ -98,8 +100,40 @@ body {
     transition: left 0.3s, width 0.3s;
 }
 
+/* จัดปุ่ม Sign in กับโปรไฟล์ให้อยู่ขวา */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* เว้นระยะห่าง */
+}
+
+/* ปุ่ม Sign in */
+.sign-in-btn {
+    background: #6366f1;
+    /* สีม่วงน้ำเงิน */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.sign-in-btn:hover {
+    background: #4f46e5;
+    /* สีเข้มขึ้นตอน hover */
+}
+
+/* ปรับขนาดโปรไฟล์ */
+.profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
 /* เมื่อ Sidebar ย่อ */
-.sidebar.collapsed ~ .topbar {
+.sidebar.collapsed~.topbar {
     left: 60px;
     width: calc(100% - 60px);
 }
@@ -134,6 +168,6 @@ body {
 }
 
 /* เมื่อ Sidebar ย่อ */
-.sidebar.collapsed ~ .content {
+.sidebar.collapsed~.content {
     margin-left: 60px;
 }
