@@ -14,11 +14,11 @@ body {
 .sidebar {
     width: 250px;
     height: 100vh;
-    background: #FBFAFF;
-    color: #5F6388;
+    background: #0d6efd;
     position: fixed;
     transition: width 0.3s;
     overflow: hidden;
+    z-index: 10;
 }
 
 .sidebar.collapsed {
@@ -29,7 +29,7 @@ body {
 .toggle-btn {
     background: none;
     border: none;
-    color: #5F6388;
+    color: white;
     font-size: 24px;
     cursor: pointer;
     padding: 10px;
@@ -49,10 +49,10 @@ body {
 .menu a {
     display: block;
     text-decoration: none;
-    color: #5F6388;
+    color: white;
     padding: 10px 15px;
     border-radius: 5px;
-    transition: background 0.3s;
+    /* transition: background 0.3 ease; */
 }
 
 .menu a:hover {
@@ -89,7 +89,6 @@ body {
     width: calc(100% - 250px);
     /* ลดขนาดตาม sidebar */
     height: 60px;
-    background: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -142,7 +141,7 @@ body {
 .logo {
     font-size: 20px;
     font-weight: bold;
-    color: white;
+    color: black;
 }
 
 /* Profile */

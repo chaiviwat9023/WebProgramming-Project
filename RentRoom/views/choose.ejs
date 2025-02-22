@@ -1,0 +1,61 @@
+<%- include("partials/head") %>
+<style>
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease; 
+  }
+</style>
+<body>
+  <%- include("partials/nav") %>
+  <div class="container text-center mt-5">
+    <div class="room-cards-container" style="margin-left: 75px;">
+        <% let roomNumber = 101; %> <!-- เริ่มต้นที่ 101 -->
+        <% for(let i = 0; i < 3; i++) { %> <!-- สร้าง 3 แถว -->
+          <div class="row mb-5">
+            <% for(let j = 0; j < 3; j++) { %> <!-- สร้าง 3 คอลัมน์ต่อแถว -->
+              <div class="col">
+                <div class="card" style="width: 22rem;">
+                    <img src="/images/deluxe.jpg" class="card-img-top" style="height: 17rem;">
+                    <div class="card-body">
+                      <h5>Room</h5>
+                      <h2> <%= roomNumber %></h2>
+                      <!-- ปุ่ม Rent ที่จะเปิด modal -->
+                      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal<%= roomNumber %>">
+                        Rent
+                      </button>
+                    </div>
+                  </div>
+              </div>
+
+              <!-- Modal สำหรับห้องแต่ละห้อง -->
+              <div class="modal fade" id="confirmationModal<%= roomNumber %>" tabindex="-1" aria-labelledby="confirmationModalLabel<%= roomNumber %>" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirmationModalLabel<%= roomNumber %>">Confirm Room</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>คุณแน่ใจหรือไม่ว่าต้องการเช่าห้อง <span style="font-size: 1.5rem; font-weight: bold;"><%= roomNumber %></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Confirm Rent</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <% roomNumber++; %> <!-- เพิ่มหมายเลขห้องขึ้นไปเรื่อยๆ -->
+            <% } %>
+          </div>
+        <% } %>
+
+    </div>
+  </div>
+
+  <!-- Script ของ Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+</body>
+<%- include("partials/script") %>

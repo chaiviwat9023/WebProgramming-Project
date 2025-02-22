@@ -14,8 +14,8 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
-app.get("/categories", (req, res) => {
-    res.render("categories");
+app.get("/choose", (req, res) => {
+    res.render("choose");
 });
 
 app.get("/settings", (req, res) => {
