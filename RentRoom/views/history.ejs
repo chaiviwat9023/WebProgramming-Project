@@ -1,0 +1,73 @@
+<%- include("partials/head") %>
+<body>
+    <!-- เรียกใช้ Navbar -->
+    <%- include("partials/nav") %>
+
+    <!-- เนื้อหาแต่ละหน้า -->
+    <div class="content container-fluid">
+        <h2 class="text-center my-4">ประวัติการจอง</h2>
+        <p class="text-center">ผู้ใช้ 1234</p>
+
+        <div class="table-responsive bg-light p-3 rounded shadow w-75 mx-auto">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>หมายเลขการจอง</th>
+                        <th>วันที่จอง</th>
+                        <th>หมายเลขห้อง</th>
+                        <th>สถานะการจอง</th>
+                        <th>การยกเลิก</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>00001</td>
+                        <td>1/1/2568</td>
+                        <td>101</td>
+                        <td class="text-secondary fw-bold">รออนุมัติ</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCancelModal">
+                                ยกเลิก
+                            </button>                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal ยืนยันการยกเลิก -->
+    <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmCancelLabel">ยืนยันการยกเลิก</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการจองนี้?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancelBtn">ยกเลิกการจอง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById("confirmCancelBtn").addEventListener("click", function () {
+            alert("การจองถูกยกเลิกเรียบร้อยแล้ว!"); // สามารถเปลี่ยนเป็นคำสั่งอื่นได้
+            var modal = bootstrap.Modal.getInstance(document.getElementById('confirmCancelModal'));
+            modal.hide();
+        });
+    </script>
+        
+
+    <%- include("partials/script") %>
+
+</body>
+</html>

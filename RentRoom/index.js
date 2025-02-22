@@ -22,8 +22,8 @@ app.get("/payment", (req, res) => {
     res.render("payment");
 });
 
-app.get("/help", (req, res) => {
-    res.render("help");
+app.get("/history", (req, res) => {
+    res.render("history");
 });
 
 app.get("/logout", (req, res) => {
