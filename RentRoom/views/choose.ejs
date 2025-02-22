@@ -1,56 +1,42 @@
 <%- include("partials/head") %>
 <style>
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease; 
+  /* ขยายความกว้างให้การ์ดเต็มหน้าจอ */
+  .card {
+    width: 100%; /* ให้การ์ดขยายเต็มความกว้าง */
+    max-width: 100%; /* ป้องกันการ์ดเกินความกว้าง */
+  }
+
+  .room-cards-container {
+    display: flex; /* ใช้ Flexbox เพื่อจัดเรียงการ์ด */
+    flex-direction: column; /* การ์ดจะเรียงใน 1 คอลัมน์ */
+    gap: 20px; /* ระยะห่างระหว่างการ์ด */
+    width: 100%;
   }
 </style>
+
 <body>
   <%- include("partials/nav") %>
   <div class="container text-center" style="margin-top: 100px;">
-    <div class="room-cards-container" style="margin-left: 75px;">
+    <div class="room-cards-container">
         <% let roomNumber = 101; %> <!-- เริ่มต้นที่ 101 -->
-        <% for(let i = 0; i < 3; i++) { %> <!-- สร้าง 3 แถว -->
-          <div class="row mb-5">
-            <% for(let j = 0; j < 3; j++) { %> <!-- สร้าง 3 คอลัมน์ต่อแถว -->
-              <div class="col">
-                <div class="card" style="width: 22rem;">
-                    <img src="/images/deluxe.jpg" class="card-img-top" style="height: 17rem;">
-                    <div class="card-body">
-                      <h5>Room</h5>
-                      <h2> <%= roomNumber %></h2>
-                      <!-- ปุ่ม Rent ที่จะเปิด modal -->
-                      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal<%= roomNumber %>">
-                        Rent
-                      </button>
-                    </div>
-                  </div>
+        <% for(let i = 0; i < 3; i++) { %> <!-- สร้าง 3 ห้อง -->
+          <div class="card mb-3 w-100" style="max-width: 100%;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="/images/deluxe.jpg" class="img-fluid rounded-start" alt="...">
               </div>
-
-              <!-- Modal สำหรับห้องแต่ละห้อง -->
-              <div class="modal fade" id="confirmationModal<%= roomNumber %>" tabindex="-1" aria-labelledby="confirmationModalLabel<%= roomNumber %>" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="confirmationModalLabel<%= roomNumber %>">Confirm Room</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p>คุณแน่ใจหรือไม่ว่าต้องการเช่าห้อง <span style="font-size: 1.5rem; font-weight: bold;"><%= roomNumber %></span></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Confirm Rent</button>
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                  </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Room</h5>
+                  <p class="card-text"><%= roomNumber %></p>
+                  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
                 </div>
               </div>
-
-              <% roomNumber++; %> <!-- เพิ่มหมายเลขห้องขึ้นไปเรื่อยๆ -->
-            <% } %>
+            </div>
           </div>
-        <% } %>
 
+          <% roomNumber++; %> <!-- เพิ่มหมายเลขห้องขึ้นไปเรื่อยๆ -->
+        <% } %>
     </div>
   </div>
 
