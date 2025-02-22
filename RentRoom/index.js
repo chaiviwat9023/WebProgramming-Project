@@ -18,8 +18,8 @@ app.get("/choose", (req, res) => {
     res.render("choose");
 });
 
-app.get("/settings", (req, res) => {
-    res.render("settings");
+app.get("/payment", (req, res) => {
+    res.render("payment");
 });
 
 app.get("/help", (req, res) => {
