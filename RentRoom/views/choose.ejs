@@ -29,10 +29,24 @@
   <%- include("partials/nav") %>
   <div class="container" style="margin-top: 100px;">
     <div class="row mx-auto">
-      <!-- Sidebar Filters (Left) -->
       <div class="col-md-3">
+          <div class="card p-3 mb-2">
+            <h5 class="fw-bold">ราคา</h5>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="soloTravel">
+              <label class="form-check-label" for="soloTravel">
+                6500 บาท
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="couple">
+              <label class="form-check-label" for="couple">
+                8000 บาท
+              </label>
+            </div>
+          </div>
         <div class="card p-3">
-          <h5 class="fw-bold">Filter</h5>
+          <h5 class="fw-bold">อำนวยความสะดวก</h5>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="soloTravel">
             <label class="form-check-label" for="soloTravel">
@@ -67,28 +81,35 @@
           <% for(let i = 0; i < 9; i++) { %>
             <div class="room-card card mb-3 w-100">
               <div class="row g-0 h-100">
-                <div class="col-md-4 d-flex align-items-stretch">
+                <!-- ซ้าย: รูปภาพ -->
+                <div class="col-md-4 d-flex align-items-center">
                   <img src="/images/deluxe.jpg" class="img-fluid rounded-start" 
-                       style="object-fit: cover;" alt="Room Image">
+                       style="object-fit: cover; width: 100%; height: 100%;" alt="Room Image">
                 </div>
-                <div class="col-md-8 d-flex align-items-center">
-                  <div class="card-body">
-                    <h5 class="card-title">Room <%= roomNumber %></h5>
-                    <p class="card-text">หมายเลขห้อง: <%= roomNumber %></p>
-                    <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-                    <button class="btn btn-primary" data-bs-toggle="modal" 
-                            data-bs-target="#confirmationModal<%= roomNumber %>">
-                      Rent
-                    </button>
-                    <button class="btn btn-info" data-bs-toggle="modal" 
-                            data-bs-target="#viewRoomModal<%= roomNumber %>">
-                      View
-                    </button>
+            
+                <!-- ขวา: รายละเอียด -->
+                <div class="col-md-8 d-flex">
+                  <div class="card-body w-100 d-flex flex-column h-100 justify-content-between">
+                    <!-- Room (อยู่กลาง) -->
+                    <h5 class="card-title text-center">Room <%= roomNumber %></h5>
+            
+                    <!-- ราคา + ปุ่ม (ชิดขวาและอยู่ล่าง) -->
+                    <div class="text-end">
+                      <h4 class="card-text fw-bold text-success mb-2">6,500 บาท</h4>
+                      <button class="btn btn-primary me-2" data-bs-toggle="modal" 
+                              data-bs-target="#confirmationModal<%= roomNumber %>">
+                        Rent
+                      </button>
+                      <button class="btn btn-secondary" data-bs-toggle="modal" style="color: white;"
+                              data-bs-target="#viewRoomModal<%= roomNumber %>">
+                        View
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          
+            
                             <!-- Modal สำหรับห้องแต่ละห้อง - View (รายละเอียดห้องเพิ่มเติม) -->
                             <div class="modal fade" id="viewRoomModal<%= roomNumber %>" tabindex="-1"
                               aria-labelledby="viewRoomModalLabel<%= roomNumber %>" aria-hidden="true">
