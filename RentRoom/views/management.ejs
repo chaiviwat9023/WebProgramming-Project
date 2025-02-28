@@ -5,7 +5,7 @@
     <div class="container mt-5">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#home">Dashboard</a>
+                <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" data-bs-target="#edit-room">แก้ไขห้องพัก</a>
@@ -16,9 +16,8 @@
         </ul>
         
         <div class="tab-content mt-3">
-            <div class="tab-pane fade show active" id="home" role="tabpanel">
-                <h3>Dashboard</h3>
-                <p>...</p>
+            <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+                <%- include("partials/dashboard") %>
             </div>
             <div class="tab-pane fade" id="edit-room" role="tabpanel">
                 <%- include("partials/edit-room") %>
