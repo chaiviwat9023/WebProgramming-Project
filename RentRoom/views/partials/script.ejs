@@ -2,4 +2,26 @@
     function toggleSidebar() {
         document.getElementById("sidebar").classList.toggle("collapsed");
     }
+    const ctx = document.getElementById('myChart').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'bar', // ประเภทของกราฟ (bar, line, pie ฯลฯ)
+    data: {
+      labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.'], // ป้ายกำกับแกน X
+      datasets: [{
+        label: 'ยอดขาย (บาท)',
+        data: [12000, 19000, 3000, 5000, 22000], // ข้อมูลแกน Y
+        backgroundColor: 'rgba(54, 162, 235, 0.5)', // สีกราฟ
+        borderColor: 'rgba(54, 162, 235, 1)', 
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 </script>
