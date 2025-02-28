@@ -34,6 +34,10 @@ app.get("/login", (req, res) => {
     res.render("login");
 });
 
+app.get("/management", (req, res) => {
+    res.render("management");
+});
+
 // เปิดเซิร์ฟเวอร์
 const PORT = 3000;
 app.listen(PORT, () => {
