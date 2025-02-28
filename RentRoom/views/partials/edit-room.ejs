@@ -15,6 +15,7 @@
                 <option value="104">104</option>
             </select>
             <input type="number" id="new-room-number" class="form-control d-none" placeholder="กรอกหมายเลขห้อง">
+            <button id="cancel-new-room" class="btn btn-secondary mt-3 ms-2 d-none">ยกเลิก</button>
         </div>
 
         <!-- รายละเอียดห้อง -->
@@ -100,7 +101,17 @@
     });
 
     document.getElementById("new-room-btn").addEventListener("click", function() {
-        document.getElementById("room-number").classList.add("d-none");  // ซ่อน dropdown
-        document.getElementById("new-room-number").classList.remove("d-none"); // แสดง input กรอกเลขห้อง
+        document.getElementById("room-number").classList.add("d-none");
+        document.getElementById("new-room-number").classList.remove("d-none");
+        document.getElementById("cancel-new-room").classList.remove("d-none");
+        document.getElementById("new-room-btn").classList.add("d-none");
+    });
+
+    document.getElementById("cancel-new-room").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("room-number").classList.remove("d-none");
+        document.getElementById("new-room-number").classList.add("d-none");
+        document.getElementById("cancel-new-room").classList.add("d-none");
+        document.getElementById("new-room-btn").classList.remove("d-none");
     });
 </script>
