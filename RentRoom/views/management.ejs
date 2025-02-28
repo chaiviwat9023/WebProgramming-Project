@@ -5,28 +5,26 @@
     <div class="container mt-5">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#home">Home</a>
+                <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#home">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#room-management">Room Management</a>
+                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#room-management">แก้ไขห้องพัก</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#payment-notifications">Payment Notifications</a>
+                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#payment-notifications">แจ้งค่าใช้จ่าย</a>
             </li>
         </ul>
         
         <div class="tab-content mt-3">
             <div class="tab-pane fade show active" id="home" role="tabpanel">
-                <h3>Home</h3>
-                <p>Welcome to the management page.</p>
+                <h3>Dashboard</h3>
+                <p>...</p>
             </div>
-            <div class="tab-pane fade" id="room-management" role="tabpanel">
-                <h3>Room Management</h3>
-                <p>Manage your rooms here.</p>
+            <div class="tab-pane fade" id="edit-room" role="tabpanel">
+                <%- include("partials/edit-room") %>
             </div>
-            <div class="tab-pane fade" id="payment-notifications" role="tabpanel">
-                <h3>Payment Notifications</h3>
-                <p>View payment notifications here.</p>
+            <div class="tab-pane fade" id="report-expenses" role="tabpanel">
+                <%- include("partials/report-expenses") %>
             </div>
         </div>
         

@@ -1,0 +1,106 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h3>แก้ไขห้องพัก</h3>
+        <button id="new-room-btn" class="btn btn-primary">+ สร้างห้องใหม่</button>
+    </div>
+    
+    <form id="room-form">
+        <!-- เลือกห้อง -->
+        <div class="mb-3">
+            <label for="room-number" class="form-label">หมายเลขห้อง</label>
+            <select id="room-number" class="form-select">
+                <option value="101">101</option>
+                <option value="102">102</option>
+                <option value="103">103</option>
+                <option value="104">104</option>
+            </select>
+            <input type="number" id="new-room-number" class="form-control d-none" placeholder="กรอกหมายเลขห้อง">
+        </div>
+
+        <!-- รายละเอียดห้อง -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">ขนาดห้อง (ตร.ม.)</label>
+                <input type="number" class="form-control" id="room-size" value="28">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">ประเภทห้อง</label>
+                <select class="form-select" id="room-type">
+                    <option value="studio">ห้องสตูดิโอ</option>
+                    <option value="one-bedroom">1 ห้องนอน</option>
+                    <option value="two-bedroom">2 ห้องนอน</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label class="form-label">รองรับ (คน)</label>
+                <input type="number" class="form-control" id="room-capacity" value="2">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">ชั้น</label>
+                <input type="number" class="form-control" id="room-floor" value="3">
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label class="form-label">เฟอร์นิเจอร์</label>
+            <select class="form-select" id="room-furniture">
+                <option value="yes">มี</option>
+                <option value="no">ไม่มี</option>
+            </select>
+        </div>
+
+        <!-- ค่าใช้จ่าย -->
+        <h4 class="mt-4">ค่าใช้จ่าย</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">ค่าเช่า (บาท/เดือน)</label>
+                <input type="number" class="form-control" id="room-rent" value="6500">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">มัดจำ (บาท)</label>
+                <input type="number" class="form-control" id="room-deposit" value="13000">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">ค่าไฟ (บาท/หน่วย)</label>
+                <input type="number" class="form-control" id="room-electricity" value="8">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label class="form-label">ค่าน้ำ (บาท/หน่วย)</label>
+                <input type="number" class="form-control" id="room-water" value="20">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">ค่าอินเทอร์เน็ต</label>
+                <input type="text" class="form-control" id="room-internet" value="ฟรี">
+            </div>
+        </div>
+
+        <!-- สิ่งอำนวยความสะดวก -->
+        <div class="mb-3 mt-3">
+            <label class="form-label">สิ่งอำนวยความสะดวก</label>
+            <textarea class="form-control" id="room-facilities" rows="2"></textarea>
+        </div>
+
+        <!-- ปุ่ม -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success mt-3">บันทึก</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById("room-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        alert("บันทึกการเปลี่ยนแปลงห้องสำเร็จ!");
+    });
+
+    document.getElementById("new-room-btn").addEventListener("click", function() {
+        document.getElementById("room-number").classList.add("d-none");  // ซ่อน dropdown
+        document.getElementById("new-room-number").classList.remove("d-none"); // แสดง input กรอกเลขห้อง
+    });
+</script>
