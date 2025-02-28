@@ -14,11 +14,11 @@
             <form id="loginForm">
                 <div class="mb-3">
                     <label for="email" class="form-label">อีเมล</label>
-                    <input type="email" class="form-control" id="email" placeholder="">
+                    <input type="email" class="form-control" id="email" placeholder="" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">รหัสผ่าน</label>
-                    <input type="password" class="form-control" id="password" placeholder="">
+                    <input type="password" class="form-control" id="password" placeholder="" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">ยืนยัน</button>
             </form>
@@ -27,18 +27,18 @@
             <form id="registerForm" style="display: none;">
                 <div class="mb-3">
                     <label for="firstName" class="form-label">ชื่อจริง</label>
-                    <input type="text" class="form-control" id="firstName" placeholder="กรุณาใส่ชื่อจริง">
+                    <input type="text" class="form-control" id="firstName" placeholder="กรุณาใส่ชื่อจริง" required>
                 </div>
                 <div class="mb-3">
                     <label for="lastName" class="form-label">นามสกุล</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="กรุณาใส่นามสกุล">
+                    <input type="text" class="form-control" id="lastName" placeholder="กรุณาใส่นามสกุล" required>
                 </div>
                 <div class="mb-3">
                     <label for="registerEmail" class="form-label">อีเมล</label>
-                    <input type="email" class="form-control" id="registerEmail" placeholder="กรุณาใส่อีเมล">
+                    <input type="email" class="form-control" id="registerEmail" placeholder="กรุณาใส่อีเมล"required>
                 </div>
                 <div class="mb-3">
-                    <label for="registerPassword" class="form-label">รหัสผ่าน</label>
+                    <label for="registerPassword" class="form-label">รหัสผ่าน</label required> 
                     <input type="password" class="form-control" id="registerPassword"
                         placeholder="กรุณาใส่รหัสผ่าน">
                 </div>
@@ -52,16 +52,7 @@
         </div>
     </div>
 
-    <!-- Custom Modal แจ้งเตือน -->
-    <div id="customAlert" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0,0,0,0.7); padding: 20px; border-radius: 10px; color: white; z-index: 9999; width: auto;">
-        <div style="margin-bottom: 10px;">
-            <strong>ข้อมูลไม่ครบถ้วน!</strong> กรุณากรอกข้อมูลให้ครบถ้วน
-        </div>
-        <!-- ปุ่ม X -->
-        <button id="closeAlertButton" style="position: absolute; top: 5px; right: 5px; background: transparent; color: white; border: none; font-size: 24px; cursor: pointer;">
-            &times;
-        </button>
-    </div>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -97,7 +88,7 @@
 
                 if (email === "" || password === "") {
                     // แสดง Custom Alert
-                    showCustomAlert();
+                    alert("กรุณากรอกข้อมูลให้ครบถ้วน");
                     return;
                 }
 
@@ -118,7 +109,7 @@
 
                 if (firstName === "" || lastName === "" || registerEmail === "" || registerPassword === "") {
                     // แสดง Custom Alert
-                    showCustomAlert();
+                    alert("กรุณากรอกข้อมูลให้ครบถ้วน");
                     return;
                 }
 
@@ -130,15 +121,7 @@
                 toggleText.innerHTML = 'ยังไม่มีบัญชี? <a href="#" id="toggleForm">สมัครสมาชิก</a>';
             });
 
-            // แสดง Custom Alert
-            function showCustomAlert() {
-                document.getElementById("customAlert").style.display = "block";
-            }
 
-            // ปิด Custom Alert เมื่อกดปุ่ม "X"
-            document.getElementById("closeAlertButton").addEventListener("click", function () {
-                document.getElementById("customAlert").style.display = "none";
-            });
         });
     </script>
 
