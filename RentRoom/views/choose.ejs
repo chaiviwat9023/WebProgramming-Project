@@ -96,13 +96,15 @@
                     <!-- ราคา + ปุ่ม (ชิดขวาและอยู่ล่าง) -->
                     <div class="text-end">
                       <h4 class="card-text fw-bold text-success mb-2">6,500 บาท</h4>
-                      <button class="btn btn-primary me-2" data-bs-toggle="modal" 
-                              data-bs-target="#confirmationModal<%= roomNumber %>">
-                        Rent
-                      </button>
+                      <a href="/rent" style="text-decoration: none;">
+                        <button class="btn btn-primary me-2" data-bs-toggle="modal" 
+                        data-bs-target="#confirmModal<%= roomNumber %>">
+                        จอง
+                        </button>
+                      </a>
                       <button class="btn btn-secondary" data-bs-toggle="modal" style="color: white;"
                               data-bs-target="#viewRoomModal<%= roomNumber %>">
-                        View
+                        ดูห้องพัก
                       </button>
                     </div>
                   </div>
@@ -206,8 +208,7 @@
                                   </div>
                                 </div>
                               </div>
-                            </div>
-
+                            </div>                                            
           <% roomNumber++; %> <!-- เพิ่มหมายเลขห้องขึ้นไปเรื่อยๆ -->
         <% } %>
     </div>

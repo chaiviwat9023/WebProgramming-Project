@@ -18,6 +18,10 @@ app.get("/choose", (req, res) => {
     res.render("choose");
 });
 
+app.get("/rent", (req, res) => {
+    res.render("rent");
+});
+
 app.get("/payment", (req, res) => {
     res.render("payment");
 });
