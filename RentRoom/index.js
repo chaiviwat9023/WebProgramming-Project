@@ -9,42 +9,25 @@ app.set("views", path.join(__dirname, "views"));
 // ตั้งค่า Static Files เช่น CSS, รูปภาพ
 app.use(express.static("public"));
 
-// เส้นทางสำหรับแต่ละหน้า
-app.get("/", (req, res) => {
-    res.render("home");
-});
+// Import routes
+const homeRoutes = require("./routes/home");
+const chooseRoutes = require("./routes/choose");
+const rentRoutes = require("./routes/rent");
+const paymentRoutes = require("./routes/payment");
+const historyRoutes = require("./routes/history");
+const loginRoutes = require("./routes/login");
+const managementRoutes = require("./routes/management");
+const notifyRoutes = require("./routes/notify");
 
-app.get("/notify", (req, res) => {
-    res.render("notify");
-});
-
-app.get("/choose", (req, res) => {
-    res.render("choose");
-});
-
-app.get("/rent", (req, res) => {
-    res.render("rent");
-});
-
-app.get("/payment", (req, res) => {
-    res.render("payment");
-});
-
-app.get("/history", (req, res) => {
-    res.render("history");
-});
-
-app.get("/logout", (req, res) => {
-    res.send("Logging out...");
-});
-
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-
-app.get("/management", (req, res) => {
-    res.render("management");
-});
+// ใช้งาน routes
+app.use("/", homeRoutes);
+app.use("/choose", chooseRoutes);
+app.use("/rent", rentRoutes);
+app.use("/payment", paymentRoutes);
+app.use("/history", historyRoutes);
+app.use("/login", loginRoutes);
+app.use("/management", managementRoutes);
+app.use("/notify", notifyRoutes);
 
 // เปิดเซิร์ฟเวอร์
 const PORT = 3000;
