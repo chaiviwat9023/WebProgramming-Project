@@ -1,7 +1,6 @@
 <%- include("partials/head") %>
 
 <body>
-
     <!-- เรียกใช้ Navbar -->
     <%- include("partials/nav") %>
 
@@ -114,13 +113,13 @@
                 }
 
                 // ตรวจสอบความยาวของชื่อผู้ใช้
-                if (registerUsername.length > 30) {
+                if (registerUsername.length > 50) {
                     alert("ชื่อผู้ใช้ต้องไม่เกิน 30 ตัวอักษร");
                     return;
                 }
 
                 //   ตรวจสอบความยาวของรหัสผ่าน
-                if (registerPassword.length > 30) {
+                if (registerPassword.length > 50) {
                     alert("รหัสผ่านต้องไม่เกิน 30 ตัวอักษร");
                     return;
                 }
