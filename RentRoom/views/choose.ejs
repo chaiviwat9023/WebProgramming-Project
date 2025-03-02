@@ -1,11 +1,6 @@
 <%- include("partials/head") %>
 <style>
 
-  .card {
-    width: 100%;
-    max-width: 100%; 
-  }
-
   .room-card:hover {
     box-shadow: 0px 0px 10px 10px rgba(26, 152, 255, 0.1);
   }
@@ -13,7 +8,6 @@
   .room-cards-container {
     display: flex; 
     flex-direction: column;
-    gap: 20px; 
     width: 75%;
   }
   .modal-body {
@@ -27,85 +21,41 @@
 
 <body>
   <%- include("partials/nav") %>
-  <div class="container" style="margin-top: 100px;">
-    <div class="row mx-auto">
-      <div class="col-md-3">
-          <div class="card p-3 mb-2">
-            <h5 class="fw-bold">ราคา</h5>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="soloTravel">
-              <label class="form-check-label" for="soloTravel">
-                6500 บาท
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="couple">
-              <label class="form-check-label" for="couple">
-                8000 บาท
-              </label>
-            </div>
-          </div>
-        <div class="card p-3">
-          <h5 class="fw-bold">อำนวยความสะดวก</h5>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="soloTravel">
-            <label class="form-check-label" for="soloTravel">
-              ไมโครเวฟ
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="couple">
-            <label class="form-check-label" for="couple">
-              เครื่องทำน้ำอุ่น
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="familyGroups">
-            <label class="form-check-label" for="familyGroups">
-              เครื่องปรับอากาศ
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="business">
-            <label class="form-check-label" for="business">
-              Smart TV
-            </label>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Room Cards (Right) -->
-      <div class="col-md-9">
-        <div class="room-cards-container">
+  <div class="container-fluid" style="margin-top: 100px;">
+      <!-- Room Cards -->
+      <div class="col-md-10 mx-auto ">
+        <div class="row">
           <% let roomNumber = 101; %>
-          <% for(let i = 0; i < 9; i++) { %>
-            <div class="room-card card mb-3 w-100">
-              <div class="row g-0 h-100">
-                <!-- ซ้าย: รูปภาพ -->
-                <div class="col-md-4 d-flex align-items-center">
-                  <img src="/images/deluxe.jpg" class="img-fluid rounded-start" 
-                       style="object-fit: cover; width: 100%; height: 100%;" alt="Room Image">
-                </div>
-            
-                <!-- ขวา: รายละเอียด -->
-                <div class="col-md-8 d-flex">
-                  <div class="card-body w-100 d-flex flex-column h-100 justify-content-between">
-                    <!-- Room (อยู่กลาง) -->
-                    <h5 class="card-title text-center">Room <%= roomNumber %></h5>
-            
-                    <!-- ราคา + ปุ่ม (ชิดขวาและอยู่ล่าง) -->
-                    <div class="text-end">
-                      <h4 class="card-text fw-bold text-success mb-2">6,500 บาท</h4>
-                      <a href="/rent" style="text-decoration: none;">
-                        <button class="btn btn-primary me-2" data-bs-toggle="modal" 
-                        data-bs-target="#confirmModal<%= roomNumber %>">
-                        จอง
+          <% for(let i = 0; i < 12; i++) { %>
+            <div class="col-md-3 mb-4">
+              <div class="room-card card">
+                <div class="row g-0 ">
+                  <!--รูปภาพ -->
+                  <div class="col-12">
+                    <img src="/images/deluxe.jpg" class="img-fluid rounded-top" 
+                         style="object-fit: cover; width: 100%; height: 200px;" alt="Room Image">
+                  </div>
+      
+                  <!--รายละเอียด -->
+                  <div class="col-12 d-flex flex-column">
+                    <div class="card-body w-100 d-flex flex-column h-100 justify-content-between">
+                      <!-- Room-->
+                      <h5 class="card-title text-center">Room <%= roomNumber %></h5>
+      
+                      <!-- ราคา + ปุ่ม-->
+                      <div class="text-center">
+                        <h4 class="card-text fw-bold text-success mb-2">6,500 บาท</h4>
+                        <a href="/rent" style="text-decoration: none;">
+                          <button class="btn btn-primary me-2" data-bs-toggle="modal" 
+                          data-bs-target="#confirmModal<%= roomNumber %>">
+                          จอง
+                          </button>
+                        </a>
+                        <button class="btn btn-secondary" data-bs-toggle="modal" style="color: white;"
+                                data-bs-target="#viewRoomModal<%= roomNumber %>">
+                          ดูห้องพัก
                         </button>
-                      </a>
-                      <button class="btn btn-secondary" data-bs-toggle="modal" style="color: white;"
-                              data-bs-target="#viewRoomModal<%= roomNumber %>">
-                        ดูห้องพัก
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -141,9 +91,6 @@
                                             </li>
                                             <li><i class="fas fa-expand"></i> ขนาดห้อง:
                                               <strong>28 ตร.ม.</strong>
-                                            </li>
-                                            <li><i class="fas fa-bed"></i> ประเภทห้อง:
-                                              <strong>ห้องสตูดิโอ</strong>
                                             </li>
                                             <li><i class="fas fa-users"></i> รองรับ: <strong>2
                                                 คน</strong></li>
