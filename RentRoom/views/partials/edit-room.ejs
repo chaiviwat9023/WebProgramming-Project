@@ -8,11 +8,8 @@
         <!-- เลือกห้อง -->
         <div class="mb-3">
             <label for="room-number" class="form-label">หมายเลขห้อง</label>
-            <select id="room-number" class="form-select">
-                <option value="101">101</option>
-                <option value="102">102</option>
-                <option value="103">103</option>
-                <option value="104">104</option>
+            <select id="roomSelect" class="form-select">
+                <option value="">เลือกห้อง</option>
             </select>
             <input type="number" id="new-room-number" class="form-control d-none" placeholder="กรอกหมายเลขห้อง">
             <button id="cancel-new-room" class="btn btn-secondary mt-3 ms-2 d-none">ยกเลิก</button>
@@ -22,34 +19,30 @@
         <div class="row">
             <div class="col-md-6">
                 <label class="form-label">ขนาดห้อง (ตร.ม.)</label>
-                <input type="number" class="form-control" id="room-size" value="28">
+                <input type="text" class="form-control" id="roomSize">
             </div>
             <div class="col-md-6">
                 <label class="form-label">ประเภทห้อง</label>
-                <select class="form-select" id="room-type">
-                    <option value="studio">ห้องสตูดิโอ</option>
-                    <option value="one-bedroom">1 ห้องนอน</option>
-                    <option value="two-bedroom">2 ห้องนอน</option>
-                </select>
+                <input type="text" class="form-control" id="roomType">
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-md-6">
                 <label class="form-label">รองรับ (คน)</label>
-                <input type="number" class="form-control" id="room-capacity" value="2">
+                <input type="number" class="form-control" id="roomCapacity">
             </div>
             <div class="col-md-6">
                 <label class="form-label">ชั้น</label>
-                <input type="number" class="form-control" id="room-floor" value="3">
+                <input type="number" class="form-control" id="roomFloor">
             </div>
         </div>
 
         <div class="mb-3 mt-3">
             <label class="form-label">เฟอร์นิเจอร์</label>
-            <select class="form-select" id="room-furniture">
-                <option value="yes">มี</option>
-                <option value="no">ไม่มี</option>
+            <select class="form-select" id="roomFurniture">
+                <option value="1">มี</option>
+                <option value="0">ไม่มี</option>
             </select>
         </div>
 
@@ -58,26 +51,29 @@
         <div class="row">
             <div class="col-md-4">
                 <label class="form-label">ค่าเช่า (บาท/เดือน)</label>
-                <input type="number" class="form-control" id="room-rent" value="6500">
+                <input type="number" class="form-control" id="roomRentPrice">
             </div>
             <div class="col-md-4">
                 <label class="form-label">มัดจำ (บาท)</label>
-                <input type="number" class="form-control" id="room-deposit" value="13000">
+                <input type="number" class="form-control" id="roomDeposit">
             </div>
             <div class="col-md-4">
                 <label class="form-label">ค่าไฟ (บาท/หน่วย)</label>
-                <input type="number" class="form-control" id="room-electricity" value="8">
+                <input type="number" class="form-control" id="roomElectricityPrice">
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-md-6">
                 <label class="form-label">ค่าน้ำ (บาท/หน่วย)</label>
-                <input type="number" class="form-control" id="room-water" value="20">
+                <input type="number" class="form-control" id="roomWaterPrice">
             </div>
             <div class="col-md-6">
                 <label class="form-label">ค่าอินเทอร์เน็ต</label>
-                <input type="text" class="form-control" id="room-internet" value="ฟรี">
+                <select class="form-select" id="roomInternet">
+                    <option value="free">ฟรี</option>
+                    <option value="not free">ไม่ฟรี</option>
+                </select>
             </div>
         </div>
 
@@ -101,7 +97,7 @@
     });
 
     document.getElementById("new-room-btn").addEventListener("click", function() {
-        document.getElementById("room-number").classList.add("d-none");
+        document.getElementById("roomSelect").classList.add("d-none");
         document.getElementById("new-room-number").classList.remove("d-none");
         document.getElementById("cancel-new-room").classList.remove("d-none");
         document.getElementById("new-room-btn").classList.add("d-none");
@@ -109,9 +105,53 @@
 
     document.getElementById("cancel-new-room").addEventListener("click", function(event) {
         event.preventDefault();
-        document.getElementById("room-number").classList.remove("d-none");
+        document.getElementById("roomSelect").classList.remove("d-none");
         document.getElementById("new-room-number").classList.add("d-none");
         document.getElementById("cancel-new-room").classList.add("d-none");
         document.getElementById("new-room-btn").classList.remove("d-none");
     });
+
+    /* ----------------- API ----------------- */
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        const roomSelect = document.getElementById("roomSelect");
+
+        // โหลดรายการห้อง
+        const response = await fetch("/management/edit-room/");
+        const rooms = await response.json();
+        console.log("✅ Loaded Rooms:", rooms); // ตรวจสอบข้อมูลห้อง
+
+        rooms.forEach(room => {
+            const option = document.createElement("option");
+            option.value = room.room_id;
+            option.textContent = room.room_id;
+            roomSelect.appendChild(option);
+        });
+    });
+
+    document.getElementById("roomSelect").addEventListener("change", async function () {
+        const roomId = this.value;
+        if (!roomId) return;
+
+        const response = await fetch(`/management/edit-room/${roomId}`);
+        const data = await response.json();
+        console.log("✅ Room Data:", data); // ตรวจสอบข้อมูลห้อง
+
+        if (data.error) {
+            alert("ไม่พบข้อมูลห้อง");
+            return;
+        }
+
+        document.getElementById("roomSize").value = data.size;
+        document.getElementById("roomType").value = data.type;
+        document.getElementById("roomCapacity").value = data.capacity;
+        document.getElementById("roomFloor").value = data.floor;
+        document.getElementById("roomFurniture").value = data.furniture ? "1" : "0";
+        document.getElementById("roomRentPrice").value = data.rent_price;
+        document.getElementById("roomDeposit").value = data.deposit;
+        document.getElementById("roomElectricityPrice").value = data.electricity_price;
+        document.getElementById("roomWaterPrice").value = data.water_price;
+        document.getElementById("roomInternet").value = data.internet;
+    });
+
 </script>
