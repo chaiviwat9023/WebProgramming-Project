@@ -44,11 +44,12 @@ router.post("/", (req, res) => {
         electricity_price,
         water_price,
         internet,
+        facilities,
     } = req.body;
 
     const query = `
-        INSERT INTO rooms (room_id, size, type, capacity, floor, furniture, rent_price, deposit, electricity_price, water_price, internet)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO rooms (room_id, size, type, capacity, floor, furniture, rent_price, deposit, electricity_price, water_price, internet, facilities)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const params = [
         room_id,
@@ -62,6 +63,7 @@ router.post("/", (req, res) => {
         electricity_price,
         water_price,
         internet,
+        facilities,
     ];
 
     db.run(query, params, function (err) {
@@ -87,11 +89,12 @@ router.put("/:roomId", (req, res) => {
         electricity_price,
         water_price,
         internet,
+        facilities,
     } = req.body;
 
     const query = `
         UPDATE rooms
-        SET size = ?, type = ?, capacity = ?, floor = ?, furniture = ?, rent_price = ?, deposit = ?, electricity_price = ?, water_price = ?, internet = ?
+        SET size = ?, type = ?, capacity = ?, floor = ?, furniture = ?, rent_price = ?, deposit = ?, electricity_price = ?, water_price = ?, internet = ?, facilities = ?
         WHERE room_id = ?
     `;
     const params = [
@@ -105,6 +108,7 @@ router.put("/:roomId", (req, res) => {
         electricity_price,
         water_price,
         internet,
+        facilities,
         roomId,
     ];
 

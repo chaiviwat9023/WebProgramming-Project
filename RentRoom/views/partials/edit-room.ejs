@@ -80,7 +80,7 @@
         <!-- สิ่งอำนวยความสะดวก -->
         <div class="mb-3 mt-3">
             <label class="form-label">สิ่งอำนวยความสะดวก</label>
-            <textarea class="form-control" id="room-facilities" rows="2"></textarea>
+            <textarea class="form-control" id="roomFacilities" rows="2"></textarea>
         </div>
 
         <!-- ปุ่ม -->
@@ -147,6 +147,7 @@
         document.getElementById("roomElectricityPrice").value = data.electricity_price;
         document.getElementById("roomWaterPrice").value = data.water_price;
         document.getElementById("roomInternet").value = data.internet;
+        document.getElementById("roomFacilities").value = data.facilities;
     });
 
     document.getElementById("room-form").addEventListener("submit", async function (event) {
@@ -169,6 +170,7 @@
             electricity_price: document.getElementById("roomElectricityPrice").value,
             water_price: document.getElementById("roomWaterPrice").value,
             internet: document.getElementById("roomInternet").value,
+            facilities: document.getElementById("roomFacilities").value,
         };
 
         try {
