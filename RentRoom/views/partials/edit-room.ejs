@@ -112,7 +112,7 @@
         const roomSelect = document.getElementById("roomSelect");
 
         // โหลดรายการห้อง
-        const response = await fetch("/management/edit-room/");
+        const response = await fetch("/edit-room/");
         const rooms = await response.json();
         console.log("✅ Loaded Rooms:", rooms); // ตรวจสอบข้อมูลห้อง
 
@@ -128,7 +128,7 @@
         const roomId = this.value;
         if (!roomId) return;
 
-        const response = await fetch(`/management/edit-room/${roomId}`);
+        const response = await fetch(`/edit-room/${roomId}`);
         const data = await response.json();
         console.log("✅ Room Data:", data); // ตรวจสอบข้อมูลห้อง
 
@@ -175,7 +175,7 @@
 
         try {
             const method = isAddingNewRoom ? "POST" : "PUT";
-            const url = isAddingNewRoom ? "/management/edit-room/" : `/management/edit-room/${roomId}`;
+            const url = isAddingNewRoom ? "/edit-room/" : `/edit-room/${roomId}`;
 
             const response = await fetch(url, {
                 method: method,

@@ -32,6 +32,12 @@ app.use("/login", loginRoutes);
 app.use("/management", managementRoutes);
 app.use("/notify", notifyRoutes);
 
+// Management import routes
+const editRoomRoutes = require("./routes/edit-room");
+
+// Management ใช้งาน routes
+app.use("/edit-room", editRoomRoutes);
+
 // เปิดเซิร์ฟเวอร์
 const PORT = 3000;
 app.listen(PORT, () => {
