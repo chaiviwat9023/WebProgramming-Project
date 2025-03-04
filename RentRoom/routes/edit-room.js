@@ -30,5 +30,91 @@ router.get("/:roomId", (req, res) => {
     });
 });
 
+// เพิ่มห้องใหม่ (POST)
+router.post("/", (req, res) => {
+    const {
+        room_id,
+        size,
+        type,
+        capacity,
+        floor,
+        furniture,
+        rent_price,
+        deposit,
+        electricity_price,
+        water_price,
+        internet,
+    } = req.body;
+
+    const query = `
+        INSERT INTO rooms (room_id, size, type, capacity, floor, furniture, rent_price, deposit, electricity_price, water_price, internet)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const params = [
+        room_id,
+        size,
+        type,
+        capacity,
+        floor,
+        furniture,
+        rent_price,
+        deposit,
+        electricity_price,
+        water_price,
+        internet,
+    ];
+
+    db.run(query, params, function (err) {
+        if (err) {
+            console.error("❌ Error adding new room:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+        res.json({ message: "Room added successfully", roomId: room_id });
+    });
+});
+
+// อัปเดตห้องที่มีอยู่ (PUT)
+router.put("/:roomId", (req, res) => {
+    const { roomId } = req.params;
+    const {
+        size,
+        type,
+        capacity,
+        floor,
+        furniture,
+        rent_price,
+        deposit,
+        electricity_price,
+        water_price,
+        internet,
+    } = req.body;
+
+    const query = `
+        UPDATE rooms
+        SET size = ?, type = ?, capacity = ?, floor = ?, furniture = ?, rent_price = ?, deposit = ?, electricity_price = ?, water_price = ?, internet = ?
+        WHERE room_id = ?
+    `;
+    const params = [
+        size,
+        type,
+        capacity,
+        floor,
+        furniture,
+        rent_price,
+        deposit,
+        electricity_price,
+        water_price,
+        internet,
+        roomId,
+    ];
+
+    db.run(query, params, function (err) {
+        if (err) {
+            console.error("❌ Error updating room:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+        res.json({ message: "Room updated successfully", roomId: roomId });
+    });
+});
 
 module.exports = router;

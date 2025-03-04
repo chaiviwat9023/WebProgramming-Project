@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+// ตั้งค่า middleware สำหรับอ่าน JSON
+app.use(express.json());
+
 // ตั้งค่าให้ใช้ EJS
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

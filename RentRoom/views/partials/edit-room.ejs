@@ -2,6 +2,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h3>แก้ไขห้องพัก</h3>
         <button id="new-room-btn" class="btn btn-primary">+ สร้างห้องใหม่</button>
+        <button id="cancel-new-room" class="btn btn-secondary ms-2 d-none">ยกเลิก</button>
     </div>
     
     <form id="room-form">
@@ -12,7 +13,6 @@
                 <option value="">เลือกห้อง</option>
             </select>
             <input type="number" id="new-room-number" class="form-control d-none" placeholder="กรอกหมายเลขห้อง">
-            <button id="cancel-new-room" class="btn btn-secondary mt-3 ms-2 d-none">ยกเลิก</button>
         </div>
 
         <!-- รายละเอียดห้อง -->
@@ -91,19 +91,14 @@
 </div>
 
 <script>
-    document.getElementById("room-form").addEventListener("submit", function (event) {
-        event.preventDefault();
-        alert("บันทึกการเปลี่ยนแปลงห้องสำเร็จ!");
-    });
-
-    document.getElementById("new-room-btn").addEventListener("click", function() {
+    document.getElementById("new-room-btn").addEventListener("click", function () {
         document.getElementById("roomSelect").classList.add("d-none");
         document.getElementById("new-room-number").classList.remove("d-none");
         document.getElementById("cancel-new-room").classList.remove("d-none");
         document.getElementById("new-room-btn").classList.add("d-none");
     });
 
-    document.getElementById("cancel-new-room").addEventListener("click", function(event) {
+    document.getElementById("cancel-new-room").addEventListener("click", function (event) {
         event.preventDefault();
         document.getElementById("roomSelect").classList.remove("d-none");
         document.getElementById("new-room-number").classList.add("d-none");
@@ -152,6 +147,54 @@
         document.getElementById("roomElectricityPrice").value = data.electricity_price;
         document.getElementById("roomWaterPrice").value = data.water_price;
         document.getElementById("roomInternet").value = data.internet;
+    });
+
+    document.getElementById("room-form").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const isAddingNewRoom = !document.getElementById("new-room-number").classList.contains("d-none");
+        const roomId = isAddingNewRoom
+            ? document.getElementById("new-room-number").value
+            : document.getElementById("roomSelect").value;
+
+        const formData = {
+            room_id: roomId,
+            size: document.getElementById("roomSize").value,
+            type: document.getElementById("roomType").value,
+            capacity: document.getElementById("roomCapacity").value,
+            floor: document.getElementById("roomFloor").value,
+            furniture: document.getElementById("roomFurniture").value === "1",
+            rent_price: document.getElementById("roomRentPrice").value,
+            deposit: document.getElementById("roomDeposit").value,
+            electricity_price: document.getElementById("roomElectricityPrice").value,
+            water_price: document.getElementById("roomWaterPrice").value,
+            internet: document.getElementById("roomInternet").value,
+        };
+
+        try {
+            const method = isAddingNewRoom ? "POST" : "PUT";
+            const url = isAddingNewRoom ? "/management/edit-room/" : `/management/edit-room/${roomId}`;
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(method === "PUT" ? "บันทึกการเปลี่ยนแปลงห้องสำเร็จ!" : "เพิ่มห้องใหม่สำเร็จ!");
+                location.reload();
+            } else {
+                alert("เกิดข้อผิดพลาด: " + (result.error || "ไม่สามารถดำเนินการได้"));
+            }
+        } catch (error) {
+            console.error("❌ Error:", error);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+        }
     });
 
 </script>
