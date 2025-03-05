@@ -1,30 +1,111 @@
-
-
-<!-- Top Bar -->
- <nav>
-  <div class="topbar">
-    <div class="logo"></div>
-    <div class="topbar-right">
-      <a href="/login" class="sign-in-btn">Sign in</a>
-    </div>
+<nav class="navbar navbar-expand-lg">
+  <a class="navbar-brand" href="#">ชื่อเว็บไซต์</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse p-1" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
+      <!-- ใช้ ms-auto เพื่อจัดให้อยู่ทางขวา -->
+      <li class="nav-item">
+        <a class="btn btn-outline-primary" href="login">ล็อกอิน</a>
+        <!-- ปุ่ม Login -->
+      </li>
+    </ul>
   </div>
+</nav>
 
- </nav>
- <!-- Side Bar -->
+<!-- Side Bar -->
 <aside>
   <div class="sidebar" id="sidebar">
-    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-    <ul class="menu">
-      <li><a href="/notify"><i class="bi bi-bell-fill"></i><span>แจ้งเตือน</span></a></li>
-      <li><a href="/choose"><i class="bi bi-door-closed-fill"></i><span>ห้องเช่า</span></a></li>
-      <li><a href="/payment"><i class="bi bi-envelope-paper-fill"></i><span>ชำระ</span></a></li>
-      <li><a href="/history"><i class="bi bi-clock-fill"></i><span>ประวัติการจอง</span></a></li>
-      <li><a href="/management"><i class="bi bi-gear-wide"></i><span>ตั้งค่า</span></a></li>
+    <ul class="menu list-unstyled">
+      <div class="highlight"></div>
+      <li id="toggleBtn" class="active">
+        <a href="#"><i class="bi bi-list"></i></a>
+      </li>
+      <li>
+        <a href="notify"
+          ><i class="bi bi-bell"></i> <span>การแจ้งเตือน</span></a
+        >
+      </li>
+      <li>
+        <a href="choose"
+          ><i class="bi bi-door-closed"></i> <span>เลือกห้อง</span></a
+        >
+      </li>
+      <li>
+        <a href="payment"
+          ><i class="bi bi-envelope-paper"></i> <span>ใบแจ้งการชำระ</span></a
+        >
+      </li>
+      <li>
+        <a href="history"
+          ><i class="bi bi-clock"></i> <span>ประวัติการจอง</span></a
+        >
+      </li>
+      <li>
+        <a href="management"><i class="bi bi-gear"></i> <span>ตั้งค่า</span></a>
+      </li>
     </ul>
-    <div class="profile">
-      <img src="/images/1.jpg" alt="Profile">
-    </div>
-    
   </div>
-
 </aside>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuItems = document.querySelectorAll(".menu li");
+    const highlight = document.querySelector(".highlight");
+
+    const toggleButton = document.getElementById("toggleBtn"); // ปุ่ม toggle
+    const sidebar = document.querySelector(".sidebar"); // Sidebar container
+
+    // ทำให้ Sidebar ขยาย/ยุบ
+    toggleButton.addEventListener("click", function () {
+      sidebar.classList.toggle("expanded");
+    });
+    // อ่านตำแหน่งเมนูที่เลือกจาก localStorage
+    const activeIndex = localStorage.getItem("activeMenuIndex");
+    if (activeIndex) {
+      const activeItem = menuItems[activeIndex];
+      activeItem.classList.add("active");
+      moveHighlight(activeItem);
+      activeItem.querySelector("a").style.color = "white"; // เปลี่ยนสีให้เป็นสีขาว
+    }
+
+    function moveHighlight(target) {
+      const targetRect = target.getBoundingClientRect();
+      highlight.style.top = `${
+        targetRect.top - target.parentElement.getBoundingClientRect().top
+      }px`;
+    }
+
+    menuItems.forEach((item, index) => {
+      item.addEventListener("click", function (event) {
+        event.preventDefault(); // หยุดการทำงานของ href
+
+        menuItems.forEach((i) => {
+          i.classList.remove("active");
+          i.querySelector("a").style.color = ""; // คืนค่าสีเดิม
+        });
+
+        this.classList.add("active");
+        moveHighlight(this);
+        this.querySelector("a").style.color = "white"; // เปลี่ยนสีของ a tag
+
+        // เก็บตำแหน่งของเมนูที่เลือกใน localStorage
+        localStorage.setItem("activeMenuIndex", index);
+
+        // ใช้ setTimeout เพื่อหน่วงการโหลดหน้าใหม่
+        setTimeout(() => {
+          window.location.href = this.querySelector("a").getAttribute("href"); // ไปที่ href ของเมนูที่เลือก
+        }, 300); // ให้หน่วง 300ms (ให้เวลาการเลื่อนเสร็จ)
+      });
+    });
+  });
+</script>

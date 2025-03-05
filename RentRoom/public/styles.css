@@ -1,214 +1,88 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    display: flex;
-    background: #F3F4F8;
-}
-
-/* ----------------- Topbar ----------------- */
-.topbar {
-    width: calc(100% - 250px);
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    position: fixed;
-    left: 250px;
-}
-
-/* จัดปุ่ม Sign in กับโปรไฟล์ให้อยู่ขวา */
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    /* เว้นระยะห่าง */
-}
-
-/* ปุ่ม Sign in */
-.sign-in-btn {
-    background: #0d6efd;
-    /* สีม่วงน้ำเงิน */
-    color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.sign-in-btn:hover {
-    background: #0d6efd;
-    /* สีเข้มขึ้นตอน hover */
-}
+/* Nav bar */
 
 
-
-/* ----------------- Sidebar ----------------- */
-
-
+/* Sidebar */
 .sidebar {
-    width: 60px;
-    height: 100vh;
-    background: #0d6efd;
-    position: fixed;
-    transition: width 0.3s;
-    overflow: hidden;
-    z-index: 10;
-    justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  transition: width 0.3s ease;
+  overflow: hidden;
+  z-index: 1;
 }
 
-.sidebar.collapsed {
-    width: 250px;
-    transition: width 0.3 ease;
+/* Sidebar Expanded */
+.sidebar.expanded {
+  width: 250px;
 }
 
-/* ปุ่ม Toggle */
-.toggle-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    display: block;
-    padding-left: 12px;
+/* ใช้ !important เพื่อให้ CSS ถูกใช้อย่างแน่นอน */
+.sidebar.expanded .menu li i {
+  margin-right: 15px;
 }
 
 
-/* เมนูใน Sidebar */
+/* Menu */
 .menu {
-    display: flex;
-    flex-direction: column; /* เรียงแนวตั้ง */
-    align-items: center; /* จัดให้อยู่ตรงกลาง */
-    gap: 20px 0; /* ระยะห่างระหว่างไอคอน */
-    list-style: none;
-    padding: 0; /* ทำให้ไม่มีกระดาษเพิ่มเติมจาก padding ของ ul */
-    margin: 0; /* ทำให้ไม่มีกระดาษเพิ่มเติมจาก margin ของ ul */
+  position: relative;
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .menu li {
-    width: 100%; /* ทำให้ li กว้างเท่ากับ sidebar */
+  position: relative;
+  width: 100%;
+  list-style: none;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 
-.menu a {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* ให้ไอคอนอยู่ทางซ้าย */
-    text-decoration: none;
-    color: white;
-    border-radius: 5px;
-    width: 100%; /* ทำให้ลิงก์เต็มความกว้างของ li */
+.menu li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+  text-decoration: none;
+  color: #343a40;
+  font-size: 18px;
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
 }
 
-.menu a i {
-    font-size: 1.5rem;
-    padding-left: 10px; /* เพิ่มระยะห่างจากขอบซ้าย */
+/* Icon */
+.menu li i {
+  font-size: 24px;
 }
 
-.menu a span {
-    opacity: 0;
+/* Hide text when collapsed */
+.sidebar:not(.expanded) .menu li a span {
+  display: none;
 }
 
-/* เมื่อ Sidebar ยืด */
-.sidebar.collapsed .menu a:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.sidebar.collapsed .menu {
-    align-items: flex-start;
-}
-
-.sidebar.collapsed .menu a {
-    padding: 0px 30px;
-    margin: 0;
-}
-
-.sidebar.collapsed .menu a i {
-    padding-left: 0;
-}
-
-.sidebar.collapsed .menu a span {
-    opacity: 1;
-    margin-left: 20px;
-    font-size: 14px;
-}
-
-.sidebar:not(.collapsed) .profile {
-    justify-content: center; /* ทำให้โปรไฟล์อยู่ตรงกลางเมื่อ Sidebar ไม่ยืด */
-    
-}
-
-.profile {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    padding: 10px 20px;
-}
-
-.profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-
-/* ----------------- Content ----------------- */
-.content {
-    margin-left: 250px;
-    margin-top: 60px;
-    padding: 20px;
-    transition: margin-left 0.3s;
-}
-
-/* เมื่อ Sidebar ย่อ */
-.sidebar.collapsed~.content {
-    margin-left: 60px;
-}
-
-/* ----------------- Management Page ----------------- */
-.nav-tabs .nav-link {
-    color: #0d6efd;
-    font-weight: bold;
-}
-
-.nav-tabs .nav-link.active {
-    background-color: #0d6efd;
-    color: white;
-}
-
-.tab-content {
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-top: none;
-    border-radius: 0 0 5px 5px;
-}
-
-@media (max-width: 768px) {
-    .topbar {
-        width: 100%;
-        left: 0;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-    }
-
-    .sidebar.collapsed {
-        width: 100%;
-    }
-
-    .content {
-        margin-left: 0;
-        margin-top: 60px;
-    }
+/* Active Highlight Effect */
+.menu .highlight {
+  position: absolute;
+  width: 80%;
+  height: 60px;
+  background-color: #1e75fd;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  z-index: 1;
+  left: 10%;
 }
