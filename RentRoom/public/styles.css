@@ -1,6 +1,12 @@
 /* Nav bar */
 
-
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100; /* ให้แน่ใจว่าอยู่เหนือทุกองค์ประกอบ */
+}
 /* Sidebar */
 .sidebar {
   position: fixed;
@@ -16,7 +22,7 @@
   justify-content: center; /* Center items vertically */
   transition: width 0.3s ease;
   overflow: hidden;
-  z-index: 1;
+  z-index: 1000;
 }
 
 /* Sidebar Expanded */

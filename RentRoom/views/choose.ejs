@@ -1,8 +1,27 @@
 <%- include("partials/head") %>
 <style>
+  .slideshow-container {
+      position: relative;
+      width: 100%;
+      height: 40vh; /* กำหนดความสูงเป็น 30% ของความสูงหน้าจอ */
+      margin: auto;
+      overflow: hidden;
+  }
+  
+  .slide {
+      display: none;
+      width: 100%;
+      height: 100%
+  }
 
+  img {
+      width: 100%; 
+      height: 100%;
+      object-fit: cover; /* ควบคุมการแสดงผลของภาพให้พอดีกับพื้นที่ */
+  }
+  
   .room-card:hover {
-    box-shadow: 0px 0px 10px 10px rgba(26, 152, 255, 0.1);
+    box-shadow: 0px 0px 10px 10px rgba(97, 97, 97, 0.1);
   }
 
   .room-cards-container {
@@ -10,39 +29,57 @@
     flex-direction: column;
     width: 75%;
   }
-  .modal-body {
-      text-align: left;
-    }
 
-    .modal-title {
-      margin-left: 10px;
-    }
+  .modal-body {
+    text-align: left;
+  }
+
+  .modal-title {
+    margin-left: 10px;
+  }
+
+  .modal-dialog {
+    max-width: 700px; /* กำหนดขนาดสูงสุดของ modal */
+    width: 100%; 
+  }
 </style>
 
 <body>
   <%- include("partials/nav") %>
-  <div class="content container-fluid">
-    <h2 class="text-center mb-4">🚪 เลือกห้องพัก </h2>
+  <div class="content container-fluid" style="padding-left: 100px;">
+    <div class="slideshow-container">
+      <div class="slide">
+          <img src="/images/counter.jpg" alt="Image 1">
+      </div>
+      <div class="slide">
+          <img src="/images/grand.jpg" alt="Image 2">
+      </div>
+      <div class="slide">
+          <img src="/images/lobby.jpeg" alt="Image 3">
+      </div>
+  </div>
+  
+    <h2 class="text-center m-4">เลือกห้องพัก </h2>
       <!-- Room Cards -->
-      <div class="col-md-10 mx-auto ">
+      <div class="col-md-10 mx-auto">
         <div class="row">
           <% let roomNumber = 101; %>
-          <% for(let i = 0; i < 12; i++) { %>
-            <div class="col-md-3 mb-4">
+          <% for (let i = 0; i < 8; i++) { %> <!-- ปรับจำนวนห้องให้เป็น 6 ห้อง (2 แถว) -->
+            <div class="col-md-6 mb-4"> <!-- ปรับ col-md-3 เป็น col-md-6 เพื่อให้แต่ละห้องใช้ 50% ของแถว -->
               <div class="room-card card">
-                <div class="row g-0 ">
-                  <!--รูปภาพ -->
+                <div class="row g-0">
+                  <!-- รูปภาพ -->
                   <div class="col-12">
                     <img src="/images/deluxe.jpg" class="img-fluid rounded-top" 
                          style="object-fit: cover; width: 100%; height: 200px;" alt="Room Image">
                   </div>
-      
-                  <!--รายละเอียด -->
+          
+                  <!-- รายละเอียด -->
                   <div class="col-12 d-flex flex-column">
                     <div class="card-body w-100 d-flex flex-column h-100 justify-content-between">
                       <!-- Room-->
                       <h5 class="card-title text-center">Room <%= roomNumber %></h5>
-      
+          
                       <!-- ราคา + ปุ่ม-->
                       <div class="text-center">
                         <h4 class="card-text fw-bold text-success mb-2">6,500 บาท</h4>
@@ -66,7 +103,7 @@
                             <!-- Modal สำหรับห้องแต่ละห้อง - View (รายละเอียดห้องเพิ่มเติม) -->
                             <div class="modal fade" id="viewRoomModal<%= roomNumber %>" tabindex="-1"
                               aria-labelledby="viewRoomModalLabel<%= roomNumber %>" aria-hidden="true">
-                              <div class="modal-dialog modal-xl">
+                              <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
                                     <h5 class="modal-title" id="viewRoomModalLabel<%= roomNumber %>">
@@ -166,4 +203,21 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </body>
+
+<script>
+  let slideIndex = 0;
+
+  function showSlides() {
+      let slides = document.querySelectorAll('.slide');
+      for (let i = 0; i < slides.length; i++) {
+          slides[i].style.display = 'none';
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1 }
+      slides[slideIndex - 1].style.display = 'block';
+      setTimeout(showSlides, 3000); 
+  }
+
+  showSlides(); // Initial call to start the slideshow
+</script>
 <%- include("partials/script") %>
