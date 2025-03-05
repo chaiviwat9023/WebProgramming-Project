@@ -10,41 +10,54 @@
                     <th>หมายเลขห้อง</th>
                     <th>หมายผู้ใช้</th>
                     <th>สถานะการจอง</th>
-                    <th>การยกเลิก</th>
+                    <th>การอนุมัติ</th>
                 </tr>
             </thead>
             <tbody>
+                <% data.forEach((item)=>{ %>
                 <tr>
-                    <td>00001</td>
-                    <td>1/1/2568</td>
-                    <td>101</td>
-                    <td>1234</td>
-                    <td class="text-secondary fw-bold">รออนุมัติ</td>
+                    <td><%= item.reservation_id %></td>
+                    <td><%= item.reservation_date %></td>
+                    <td><%= item.room_id %></td>
+                    <td><%= item.user_id %></td>
+                    <td class="
+                        <%= item.status === 'อนุมัติ' ? 'text-success fw-bold' : 
+                            item.status === 'รอดำเนินการ' ? 'text-warning fw-bold' : 
+                            item.status === 'ปฏิเสธ' ? 'text-danger fw-bold' : 
+                            'text-secondary fw-bold' %>">
+                        <%= item.status %>
+                    </td>
                     <td>
-                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCancelModal">
+                        <button class="btn btn-success btn-sm approve-btn" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#confirmCancelModal"
+                            data-reservation-id="<%= item.reservation_id %>"
+                            data-room-id="<%= item.room_id %>"
+                            data-user-id="<%= item.user_id %>">
                             อนุมัติ
                         </button>                            
                     </td>
                 </tr>
+                <% }); %> 
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Modal ยืนยันการยกเลิก -->
+<!-- Modal ยืนยันการอนุมัติ -->
 <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmCancelLabel">ยืนยันการยกเลิก</h5>
+                <h5 class="modal-title" id="confirmCancelLabel">ยืนยันการอนุมัติ</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการจองนี้?
+                คุณแน่ใจหรือไม่ว่าต้องการอนุมัติการจองนี้?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                <button type="button" class="btn btn-danger" id="confirmCancelBtn">ยกเลิกการจอง</button>
+                <button type="button" class="btn btn-success" id="confirmApproveBtn">อนุมัติการจอง</button>
             </div>
         </div>
     </div>
@@ -54,9 +67,46 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    document.getElementById("confirmCancelBtn").addEventListener("click", function () {
-        alert("การจองถูกยกเลิกเรียบร้อยแล้ว!"); // สามารถเปลี่ยนเป็นคำสั่งอื่นได้
-        var modal = bootstrap.Modal.getInstance(document.getElementById('confirmCancelModal'));
-        modal.hide();
+    document.addEventListener('DOMContentLoaded', function() {
+        const approveButtons = document.querySelectorAll('.approve-btn');
+        const confirmApproveBtn = document.getElementById('confirmApproveBtn');
+
+        let currentReservationId, currentRoomId, currentUserId;
+
+        approveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // ดึงข้อมูลจากปุ่มที่คลิก
+                currentReservationId = this.getAttribute('data-reservation-id');
+                currentRoomId = this.getAttribute('data-room-id');
+                currentUserId = this.getAttribute('data-user-id');
+            });
+        });
+
+        confirmApproveBtn.addEventListener('click', function() {
+            // ส่งข้อมูลไปยังเซิร์ฟเวอร์เพื่ออนุมัติการจอง
+            fetch('/approve-booking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    reservation_id: currentReservationId,
+                    room_id: currentRoomId,
+                    user_id: currentUserId
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('การจองได้รับการอนุมัติแล้ว');
+                    window.location.reload(); // รีเฟรชหน้าเว็บ
+                } else {
+                    alert('เกิดข้อผิดพลาดในการอนุมัติการจอง');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
     });
 </script>
