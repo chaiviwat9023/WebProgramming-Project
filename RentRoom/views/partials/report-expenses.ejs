@@ -106,7 +106,7 @@
   
           // ส่งข้อมูลไปที่ server
           try {
-            const response = await fetch("/management/report-expenses", {
+            const response = await fetch("/report-expenses", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({

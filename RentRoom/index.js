@@ -34,9 +34,15 @@ app.use("/notify", notifyRoutes);
 
 // Management import routes
 const editRoomRoutes = require("./routes/edit-room");
+const reportExpenseRoutes = require("./routes/report-expenses");
+const reportBillRoutes = require("./routes/approve-bill");
+const reportBookingRoutes = require("./routes/approve-booking");
 
 // Management ใช้งาน routes
 app.use("/edit-room", editRoomRoutes);
+app.use("/report-expenses", reportExpenseRoutes);
+app.use("/approve-bill", reportBillRoutes);
+app.use("/approve-booking", reportBookingRoutes);
 
 // เปิดเซิร์ฟเวอร์
 const PORT = 3000;
