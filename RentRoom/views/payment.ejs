@@ -30,11 +30,19 @@
                         <td><%= item.water %></td>
                         <td><%= item.electricity %></td>
                         <td><%= item.total_amount %></td>
-                        <td class="text-danger fw-bold"><%= item.status %></td>
+                        <td class="
+                            <%= item.status === 'อนุมัติ' ? 'text-success fw-bold' : 
+                                'text-secondary fw-bold' %>">
+                            <%= item.status %>
+                        </td>
                         <td>
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentModal">
-                                ชำระเงิน
-                            </button>
+                            <% if (item.status !== 'อนุมัติ') { %>
+                                <button class="btn btn-primary btn-sm payment-btn" data-bill-id="<%= item.bill_id %>" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                                    ชำระเงิน
+                                </button>
+                            <% } else { %>
+                                <span class="text-success fw-bold">ชำระเงินเรียบร้อยแล้ว</span>
+                            <% } %>
                         </td>
                     </tr>
                     <% }); %> 
@@ -52,6 +60,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <p><strong>เลขบิล:</strong> <span id="modalBillId"></span></p>
                     <p><strong>หมายเลขบัญชี:</strong> 123-4-56789-0</p>
                     <p><strong>ธนาคาร:</strong> กรุงเทพ (BBL)</p>
 
@@ -84,15 +93,90 @@
     <!-- JavaScript ควบคุม Modal -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var modal = new bootstrap.Modal(document.getElementById("paymentModal"));
+            const paymentButtons = document.querySelectorAll('.payment-btn');
+            const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+            const modal = new bootstrap.Modal(document.getElementById('paymentModal')); // ประกาศ modal
 
-            document.getElementById("openModalBtn").addEventListener("click", function () {
-                modal.show();
+            let currentBillId;
+
+            paymentButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    currentBillId = this.getAttribute('data-bill-id');
+                    document.getElementById("modalBillId").textContent = currentBillId;
+                    document.getElementById("transferDate").value = "";
+                    document.getElementById("transferTime").value = "";
+                    document.getElementById("slipUpload").value = "";
+                });
             });
 
-            document.getElementById("confirmPaymentBtn").addEventListener("click", function () {
-                alert("ยืนยันการชำระเงินเรียบร้อย!"); // แจ้งเตือนเมื่อกดปุ่มยืนยัน
-                modal.hide();
+            confirmPaymentBtn.addEventListener('click', function() {
+                const billId = currentBillId;
+                const transferDate = document.getElementById('transferDate').value;
+                const transferTime = document.getElementById('transferTime').value;
+                const slipUpload = document.getElementById('slipUpload').files[0];
+
+                // ตรวจสอบข้อมูล
+                if (!billId || !transferDate || !transferTime || !slipUpload) {
+                    alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                    return;
+                }
+
+                // ตรวจสอบประเภทและขนาดไฟล์
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+
+                if (!allowedTypes.includes(slipUpload.type)) {
+                    alert('กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น (JPEG, PNG, GIF)');
+                    return;
+                }
+
+                if (slipUpload.size > maxSize) {
+                    alert('ไฟล์ขนาดใหญ่เกินไป (ขนาดสูงสุด 5MB)');
+                    return;
+                }
+
+                // อ่านไฟล์เป็น Base64
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const slipImageBase64 = e.target.result;
+
+                    // ส่งข้อมูลไปยังเซิร์ฟเวอร์
+                    fetch('/payment/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            bill_id: billId,
+                            transfer_date: transferDate,
+                            transfer_time: transferTime,
+                            slip_image: slipImageBase64
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Response Data:", data);
+                        if (data.success) {
+                            alert('บันทึกข้อมูลการชำระเงินสำเร็จ');
+                            modal.hide(); // ซ่อน Modal
+                            window.location.reload(); // รีเฟรชหน้าเว็บ
+                        } else {
+                            alert('เกิดข้อผิดพลาด: ' + data.message);
+                            modal.hide(); // ซ่อน Modal
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
+                        modal.hide(); // ซ่อน Modal
+                    });
+                };
+                reader.readAsDataURL(slipUpload);
             });
         });
     </script>
