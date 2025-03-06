@@ -11,35 +11,48 @@
 
             <!-- ฟอร์ม Login -->
             <form id="loginForm">
+                <input type="hidden" name="action" value="login">
                 <div class="mb-3">
-                    <label for="email" class="form-label">ชื่อผู้ใช้</label>
-                    <input type="email" class="form-control" id="username" placeholder="" required>
+                    <label for="username" class="form-label">ชื่อผู้ใช้</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">รหัสผ่าน</label>
-                    <input type="password" class="form-control" id="password" placeholder="" required>
+                    <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">ยืนยัน</button>
             </form>
 
             <!-- ฟอร์ม Register (ซ่อนตอนแรก) -->
             <form id="registerForm" style="display: none;">
+                <input type="hidden" name="action" value="register">
                 <div class="mb-3">
-                    <label for="firstName" class="form-label">ชื่อผู้ใช้</label>
-                    <input type="text" class="form-control" id="registerusername" placeholder="" required>
+                    <label class="form-label">ชื่อผู้ใช้</label>
+                    <input type="text" class="form-control" id="registerusername" name="username" placeholder="กรุณาใส่ชื่อผู้ใช้" required>
                 </div>
                 <div class="mb-3">
-                    <label for="lastName" class="form-label">อีเมล</label>
-                    <input type="email" class="form-control" id="registerEmail" placeholder="" required>
+                    <label class="form-label">ชื่อจริง</label>
+                    <input type="text" class="form-control" id="firstName" name="fname" placeholder="กรุณาใส่ชื่อจริง" required>
                 </div>
                 <div class="mb-3">
-                    <label for="registerEmail" class="form-label">รหัสผ่าน</label>
-                    <input type="password" class="form-control" id="registerPassword" placeholder=""required>
+                    <label class="form-label">นามสกุล</label>
+                    <input type="text" class="form-control" id="lastName" name="lname" placeholder="กรุณาใส่นามสกุล" required>
                 </div>
                 <div class="mb-3">
-                    <label for="registerPassword" class="form-label">ยืนยันรหัสผ่าน</label required> 
-                    <input type="password" class="form-control" id="confirmPassword"
-                        placeholder="">
+                    <label class="form-label">อีเมล</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="กรุณาใส่อีเมล" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">หมายเลขโทรศัพท์</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="กรุณาใส่หมายเลขโทรศัพท์" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">รหัสผ่าน</label>
+                    <input type="password" class="form-control" id="registerPassword" name="password" placeholder="กรุณาใส่รหัสผ่าน" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ยืนยันรหัสผ่าน</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="กรุณาใส่ยืนยันรหัสผ่าน" required>
                 </div>
                 <button type="submit" class="btn w-100" style="background-color: #0d6efd; color: white;">ยืนยัน</button>
             </form>
@@ -51,13 +64,10 @@
         </div>
     </div>
 
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const loginForm = document.getElementById("loginForm");
             const registerForm = document.getElementById("registerForm");
-            const toggleForm = document.getElementById("toggleForm");
             const formTitle = document.getElementById("formTitle");
             const toggleText = document.getElementById("toggleText");
 
@@ -78,85 +88,82 @@
             });
 
             // เมื่อกดปุ่ม "เข้าสู่ระบบ"
-            loginForm.addEventListener("submit", function (event) {
-                event.preventDefault(); // ป้องกันการรีเฟรชหน้า
+            loginForm.addEventListener("submit", async function (event) {
+                event.preventDefault();
 
-                // รับค่าจากช่องกรอกข้อมูล
                 const username = document.getElementById("username").value;
                 const password = document.getElementById("password").value;
 
                 if (username === "" || password === "") {
-                    // แสดง Custom Alert
                     alert("กรุณากรอกข้อมูลให้ครบถ้วน");
                     return;
                 }
 
-                // สมมติให้ login สำเร็จ
-                alert("เข้าสู่ระบบสำเร็จ!");
-                window.location.href = "/"; // กลับไปหน้า Home
+                let formData = { action: "login", username, password };
+
+                try {
+                    let response = await fetch("/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(formData)
+                    });
+
+                    let result = await response.json();
+                    if (result.success) {
+                        alert("เข้าสู่ระบบสำเร็จ!");
+                        window.location.href = "/";
+                    } else {
+                        alert("เกิดข้อผิดพลาด: " + result.message);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
+                }
             });
 
             // เมื่อกดปุ่ม "สมัครสมาชิก"
-            registerForm.addEventListener("submit", function (event) {
-                event.preventDefault(); // ป้องกันการรีเฟรชหน้า
+            registerForm.addEventListener("submit", async function (event) {
+                event.preventDefault();
 
-                // รับค่าจากช่องกรอกข้อมูล
                 const registerUsername = document.getElementById("registerusername").value;
-                const registerEmail = document.getElementById("registerEmail").value;
+                const fname = document.getElementById("firstName").value;
+                const lname = document.getElementById("lastName").value;
+                const email = document.getElementById("email").value;
+                const phone = document.getElementById("phone").value;
                 const registerPassword = document.getElementById("registerPassword").value;
                 const confirmPassword = document.getElementById("confirmPassword").value;
 
-                // ตรวจสอบว่ากรอกข้อมูลครบหรือไม่
-                if (registerUsername === "" || registerEmail === "" || registerPassword === "" || confirmPassword === "") {
+                if (!registerUsername || !fname || !lname || !email || !phone || !registerPassword || !confirmPassword) {
                     alert("กรุณากรอกข้อมูลให้ครบถ้วน");
                     return;
                 }
 
-                // ตรวจสอบความยาวของชื่อผู้ใช้
-                if (registerUsername.length > 50) {
-                    alert("ชื่อผู้ใช้ต้องไม่เกิน 30 ตัวอักษร");
-                    return;
-                }
-
-                //   ตรวจสอบความยาวของรหัสผ่าน
-                if (registerPassword.length > 50) {
-                    alert("รหัสผ่านต้องไม่เกิน 30 ตัวอักษร");
-                    return;
-                }
-
-                //ตรวจสอบความยาวของรหัสผ่าน (ขั้นต่ำ 8 ตัวอักษร)
-                if (registerPassword.length < 8) {
-                    alert("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
-                    return;
-                }
-
-                // ตรวจสอบว่ารหัสผ่านตรงกันหรือไม่
                 if (registerPassword !== confirmPassword) {
                     alert("กรุณากรอกรหัสผ่านให้ตรงกัน");
                     return;
                 }
-                // ตรวจสอบว่าอีเมลมีรูปแบบที่ถูกต้อง
-                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                if (!emailPattern.test(registerEmail)) {
-                    alert("กรุณากรอกอีเมลให้ถูกต้อง");
-                    return;
+
+                let formData = { action: "register", username: registerUsername, fname, lname, email, phone, password: registerPassword, confirmPassword };
+
+                try {
+                    let response = await fetch("/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(formData)
+                    });
+
+                    let result = await response.json();
+                    if (result.success) {
+                        alert("ลงทะเบียนสำเร็จ!");
+                        window.location.href = "/";
+                    } else {
+                        alert("เกิดข้อผิดพลาด: " + result.message);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
                 }
-
-                // ถ้าทุกอย่างถูกต้อง ให้ทำการสมัครสมาชิก (ตัวอย่าง)
-                alert("สมัครสมาชิกสำเร็จ!");
-
-                loginForm.style.display = "block";
-                registerForm.style.display = "none";
-                formTitle.textContent = "เข้าสู่ระบบ";
-                toggleText.innerHTML = 'ยังไม่มีบัญชี? <a href="#" id="toggleForm">สมัครสมาชิก</a>';
             });
-
-
         });
     </script>
-
-    <%- include("partials/script") %>
-
 </body>
-
-</html>
