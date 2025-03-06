@@ -15,59 +15,82 @@
                 </tr>
             </thead>
             <tbody>
+                <% data.forEach((item)=>{ %>
                 <tr>
-                    <td>00001</td>
-                    <td>มกราคม 2568</td>
-                    <td>101</td>
-                    <td>1234</td>
-                    <td>5750.00</td>
-                    <td class="text-danger fw-bold">ค้างชำระ</td>
+                    <td><%= item.bill_id %></td>
+                    <td><%= item.billing_cycle %></td>
+                    <td><%= item.room_id %></td>
+                    <td><%= item.user_id %></td>
+                    <td><%= item.total %></td>
+                    <td class="
+                        <%= item.status === 'ชำระเงินสำเร็จ' ? 'text-success fw-bold' :
+                        item.status === 'รอตรวจสอบ' ? 'text-warning fw-bold' :
+                        item.status === 'ค้างชำระ' ? 'text-danger fw-bold' :
+                        'text-secondary fw-bold' %>">
+                        <%= item.status %>
+                    </td>
                     <td>
-                        <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#">
+                        <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#reviewPaymentModal" data-bill-id="<%= item.bill_id %>">
                             ดูสลิป
                         </button>
                     </td>
                     <td>
-                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#">
+                        <button class="btn btn-success btn-sm approve-btn" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#confirmApproveModal" 
+                            data-bill-id="<%= item.bill_id %>">
                             อนุมัติ
                         </button>
                     </td>
                 </tr>
+                <% }); %> 
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Modal สำหรับกรอกข้อมูลการโอน -->
-<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+<!-- Modal สำหรับผู้ตรวจสอบ -->
+<div class="modal fade" id="reviewPaymentModal" tabindex="-1" aria-labelledby="reviewPaymentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="paymentModalLabel">รายละเอียดการชำระเงิน</h5>
+                <h5 class="modal-title" id="reviewPaymentModalLabel">รายละเอียดการโอนเงิน</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>หมายเลขบัญชี:</strong> 123-4-56789-0</p>
-                <p><strong>ธนาคาร:</strong> กรุงเทพ (BBL)</p>
+                <p><strong>วันที่โอน:</strong> <span id="reviewTransferDate">-</span></p>
+                <p><strong>เวลาที่โอน:</strong> <span id="reviewTransferTime">-</span></p>
 
                 <div class="mb-3">
-                    <label for="transferDate" class="form-label">วันที่โอน</label>
-                    <input type="date" class="form-control" id="transferDate">
-                </div>
-
-                <div class="mb-3">
-                    <label for="transferTime" class="form-label">เวลาที่โอน</label>
-                    <input type="time" class="form-control" id="transferTime">
-                </div>
-
-                <div class="mb-3">
-                    <label for="slipUpload" class="form-label">อัปโหลดสลิปการโอน</label>
-                    <input type="file" class="form-control" id="slipUpload">
+                    <label class="form-label"><strong>สลิปการโอน:</strong></label>
+                    <div>
+                        <img id="reviewSlipImage" src="" alt="สลิปการโอน" class="img-fluid border rounded" style="max-height: 300px; display: none;">
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                <button type="button" class="btn btn-success" id="confirmPaymentBtn">ยืนยันการชำระเงิน</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal ยืนยันการอนุมัติ -->
+<div class="modal fade" id="confirmApproveModal" tabindex="-1" aria-labelledby="confirmApproveLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmApproveLabel">ยืนยันการอนุมัติ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                คุณแน่ใจหรือไม่ว่าต้องการอนุมัติการชำระเงินนี้?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                <button type="button" class="btn btn-success" id="confirmApproveBillBtn" data-bill-id="">
+                    อนุมัติการชำระเงิน
+                </button>
             </div>
         </div>
     </div>
@@ -79,15 +102,87 @@
 <!-- JavaScript ควบคุม Modal -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        var modal = new bootstrap.Modal(document.getElementById("paymentModal"));
+        let currentBillId = null; // ตัวแปรเก็บ bill_id
 
-        document.getElementById("openModalBtn").addEventListener("click", function () {
-            modal.show();
+        // ดึงข้อมูลสลิป
+        const reviewButtons = document.querySelectorAll('[data-bs-target="#reviewPaymentModal"]');
+        const reviewTransferDate = document.getElementById('reviewTransferDate');
+        const reviewTransferTime = document.getElementById('reviewTransferTime');
+        const reviewSlipImage = document.getElementById('reviewSlipImage');
+
+        reviewButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const billId = this.getAttribute('data-bill-id');
+
+                // ดึงข้อมูลจากเซิร์ฟเวอร์
+                fetch(`/approve-bill/details/${billId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            reviewTransferDate.textContent = data.transfer_date;
+                            reviewTransferTime.textContent = data.transfer_time;
+                            reviewSlipImage.src = data.slip_image;
+                            reviewSlipImage.style.display = 'block';
+                        } else {
+                            alert('เกิดข้อผิดพลาดในการดึงข้อมูล');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('เกิดข้อผิดพลาดในการดึงข้อมูล');
+                    });
+            });
         });
 
-        document.getElementById("confirmPaymentBtn").addEventListener("click", function () {
-            alert("ยืนยันการชำระเงินเรียบร้อย!"); // แจ้งเตือนเมื่อกดปุ่มยืนยัน
-            modal.hide();
+        // ตั้งค่า currentBillId เมื่อกดปุ่ม "อนุมัติ"
+        const approveButtons = document.querySelectorAll('.approve-btn');
+
+        approveButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                currentBillId = this.getAttribute('data-bill-id');
+                console.log("🔍 ปุ่มอนุมัติถูกกด Bill ID:", currentBillId);
+
+                if (!currentBillId || currentBillId.trim() === "") {
+                    console.warn("⚠️ ไม่มีค่า bill_id");
+                    return;
+                }
+
+                console.log("✅ ตั้งค่า currentBillId:", currentBillId);
+            });
+        });
+
+        // เมื่อกดปุ่ม "อนุมัติการชำระเงิน"
+        const confirmApproveBillBtn = document.getElementById('confirmApproveBillBtn');
+        confirmApproveBillBtn.addEventListener('click', function () {
+            console.log("✅ ปุ่มอนุมัติการชำระเงินถูกกด"); // ตรวจสอบว่า Event Listener ทำงาน
+            console.log("✅ ยืนยันการอนุมัติ Bill ID:", currentBillId);
+
+            if (!currentBillId || currentBillId.trim() === "") {
+                alert('❌ ไม่พบเลขบิล');
+                return;
+            }
+
+            fetch(`/approve-bill/approve/${currentBillId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                console.log("📬 เซิร์ฟเวอร์ตอบกลับ:", response); // ตรวจสอบการตอบกลับ
+                return response.json();
+            })
+            .then(data => {
+                console.log("📬 ข้อมูลที่ได้รับจากเซิร์ฟเวอร์:", data); // ตรวจสอบข้อมูล
+                if (data.success) {
+                    alert('✅ อนุมัติการชำระเงินสำเร็จ');
+                    window.location.reload();
+                } else {
+                    alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('❌ Error:', error); // ตรวจสอบข้อผิดพลาด
+                alert('เกิดข้อผิดพลาดในการอนุมัติ');
+            });
         });
     });
 </script>

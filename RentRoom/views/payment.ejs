@@ -31,18 +31,22 @@
                         <td><%= item.electricity %></td>
                         <td><%= item.total_amount %></td>
                         <td class="
-                            <%= item.status === 'อนุมัติ' ? 'text-success fw-bold' : 
-                                'text-secondary fw-bold' %>">
+                            <%= item.status === 'ชำระเงินสำเร็จ' ? 'text-success fw-bold' :
+                            item.status === 'รอตรวจสอบ' ? 'text-warning fw-bold' :
+                            item.status === 'ค้างชำระ' ? 'text-danger fw-bold' :
+                            'text-secondary fw-bold' %>">
                             <%= item.status %>
                         </td>
                         <td>
-                            <% if (item.status !== 'อนุมัติ') { %>
+                            <% if (item.status === 'ชำระเงินสำเร็จ') { %>
+                                <span class="text-secondary fw-bold">ชำระเงินเรียบร้อยแล้ว</span>
+                            <% } else if (item.status === 'รอตรวจสอบ') { %>
+                                <span class="text-secondary fw-bold">รอการตรวจสอบบิล</span>
+                            <% } else { %>
                                 <button class="btn btn-primary btn-sm payment-btn" data-bill-id="<%= item.bill_id %>" data-bs-toggle="modal" data-bs-target="#paymentModal">
                                     ชำระเงิน
                                 </button>
-                            <% } else { %>
-                                <span class="text-success fw-bold">ชำระเงินเรียบร้อยแล้ว</span>
-                            <% } %>
+                            <% } %>                            
                         </td>
                     </tr>
                     <% }); %> 

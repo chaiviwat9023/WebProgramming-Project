@@ -14,8 +14,10 @@ router.get('/', (req, res) => {
             electricity, 
             (rent + water + electricity) AS total_amount, 
             CASE status 
-                WHEN 'pending' THEN 'รอตรวจสอบ'
-                WHEN 'paid' THEN 'อนุมัติ'
+                WHEN 'paid' THEN 'ชำระเงินสำเร็จ'
+                WHEN 'pending' THEN 'รอตรวจสอบ' 
+                WHEN 'overdue' THEN 'ค้างชำระ'
+                WHEN 'rejected' THEN 'ปฏิเสธ'
             END AS status 
         FROM bills;
     `;

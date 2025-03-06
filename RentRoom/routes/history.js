@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
                 WHEN 'pending' THEN 'รอดำเนินการ' 
                 WHEN 'approved' THEN 'อนุมัติ' 
                 WHEN 'rejected' THEN 'ปฏิเสธ' 
-                WHEN 'canceled' THEN 'ยกเลิก' 
+                WHEN 'canceled' THEN 'ยกเลิก'
             END AS status
         FROM reservations;
     `;

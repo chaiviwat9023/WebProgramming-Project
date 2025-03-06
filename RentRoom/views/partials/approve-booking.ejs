@@ -30,7 +30,7 @@
                     <td>
                         <button class="btn btn-success btn-sm approve-btn" 
                             data-bs-toggle="modal" 
-                            data-bs-target="#confirmCancelModal"
+                            data-bs-target="#confirmApproveBookModal"
                             data-reservation-id="<%= item.reservation_id %>"
                             data-room-id="<%= item.room_id %>"
                             data-user-id="<%= item.user_id %>">
@@ -45,11 +45,11 @@
 </div>
 
 <!-- Modal ยืนยันการอนุมัติ -->
-<div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelLabel" aria-hidden="true">
+<div class="modal fade" id="confirmApproveBookModal" tabindex="-1" aria-labelledby="confirmApproveBookLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmCancelLabel">ยืนยันการอนุมัติ</h5>
+                <h5 class="modal-title" id="confirmApproveBookLabel">ยืนยันการอนุมัติ</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

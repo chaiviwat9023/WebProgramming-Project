@@ -33,9 +33,13 @@
                             <%= item.status %>
                         </td>
                         <td>
+                            <% if (item.status === 'อนุมัติ') { %>
+                                <span class="text-secondary fw-bold">คุณได้รับการอนุมัติเเล้ว</span>
+                            <% } else { %>
                             <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCancelModal">
                                 ยกเลิก
-                            </button>                            
+                            </button>     
+                            <% } %>                        
                         </td>
                     </tr>
                     <% }); %> 
