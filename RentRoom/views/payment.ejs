@@ -22,20 +22,22 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <% data.forEach((item)=>{ %>
                     <tr>
-                        <td>00001</td>
-                        <td>มกราคม 2568</td>
-                        <td>5000.00</td>
-                        <td>150.00</td>
-                        <td>600.00</td>
-                        <td>5750.00</td>
-                        <td class="text-danger fw-bold">ค้างชำระ</td>
+                        <td><%= item.bill_id %></td>
+                        <td><%= item.billing_cycle %></td>
+                        <td><%= item.rent %></td>
+                        <td><%= item.water %></td>
+                        <td><%= item.electricity %></td>
+                        <td><%= item.total_amount %></td>
+                        <td class="text-danger fw-bold"><%= item.status %></td>
                         <td>
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentModal">
                                 ชำระเงิน
                             </button>
                         </td>
                     </tr>
+                    <% }); %> 
                 </tbody>
             </table>
         </div>
