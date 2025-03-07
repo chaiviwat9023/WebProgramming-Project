@@ -2,6 +2,75 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+
+// ใช้ cookie-parser ก่อน express-session
+app.use(cookieParser());
+
+// ใช้ express-session เพื่อเก็บ session
+app.use(
+  session({
+    secret: "your-secret-key", // คีย์สำหรับการเข้ารหัส session
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 }, // Cookie มีอายุ 1 ชั่วโมง
+  })
+);
+
+// ส่ง session ไปยังทุกๆ view
+app.use((req, res, next) => {
+  res.locals.session = req.session; // ส่ง session ให้ทุก view สามารถใช้งานได้
+  next();
+});
+
+// Middleware ที่ตรวจสอบว่าผู้ใช้ล็อกอินหรือยัง
+const isAuthenticated = (req, res, next) => {
+  if (req.session.user) {
+    return next(); // ผู้ใช้ล็อกอินแล้ว ไปยัง route ต่อไป
+  } else {
+    return res.redirect("/login"); // ถ้าไม่ได้ล็อกอินให้ไปหน้า login
+  }
+};
+
+// Routes สำหรับหน้าหลัก, ต้องล็อกอินก่อน
+app.get("/management", isAuthenticated, (req, res) => {
+  res.render("management"); // ไม่ต้องส่ง user ไปซ้ำ เพราะเราใช้ res.locals แล้ว
+});
+
+// เปลี่ยนให้ /login ไม่ต้องใช้ isAuthenticated เพราะผู้ใช้ยังไม่ล็อกอิน
+app.get("/login", (req, res) => {
+  if (req.session.user) {
+    // ถ้า user ล็อกอินแล้ว ให้ redirect ไปที่หน้า home
+    return res.redirect("/home");
+  }
+  res.render("login"); // ถ้าไม่ล็อกอิน ให้แสดงหน้า login
+});
+
+app.get("/home", isAuthenticated, (req, res) => {
+  res.render("home");
+});
+
+app.get("/notify", isAuthenticated, (req, res) => {
+  res.render("notify");
+});
+
+app.get("/history", isAuthenticated, (req, res) => {
+  res.render("history");
+});
+
+app.get("/payment", isAuthenticated, (req, res) => {
+  res.render("payment");
+});
+
+app.get("/logout", (req, res) => {
+    // Destroy the session and redirect to the login page
+    req.session.destroy(() => {
+        res.clearCookie("sessionId");
+        res.redirect("/choose");
+    });
+});
+
 // ตั้งค่า middleware สำหรับอ่าน JSON
 app.use(express.json());
 
@@ -48,5 +117,5 @@ app.use("/approve-booking", reportBookingRoutes);
 // เปิดเซิร์ฟเวอร์
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
