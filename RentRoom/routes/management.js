@@ -3,6 +3,8 @@ const router = express.Router();
 const db = require("../config/database"); // นำเข้า database.js
 
 router.get("/", (req, res) => {
+    const userId = req.session.user.id; // ไอดีของผู้ใช้ที่ล็อกอิน
+
     const sqlBills = `
         SELECT 
             b.bill_id, 

@@ -3,12 +3,16 @@ const router = express.Router();
 const db = require("../config/database");
 const bcrypt = require("bcrypt");
 
-// แสดงหน้า Login
+// แสดงหน้า Login และตรวจสอบการล็อกอิน
 router.get("/", (req, res) => {
-  res.render("login");
+  if (req.session.user && req.session.user.id) {
+    return res.redirect("/home"); // Redirect ไปที่ /home เมื่อล็อกอินแล้ว
+  }
+  res.render("login"); // แสดงหน้า login เมื่อไม่ได้ล็อกอิน
 });
 
-router.get("/", (req, res) => {
+// ตรวจสอบสถานะล็อกอิน (API)
+router.get("/check-login", (req, res) => {
   if (req.session.user) {
     res.json({ loggedIn: true });
   } else {
@@ -16,6 +20,7 @@ router.get("/", (req, res) => {
   }
 });
 
+// จัดการการล็อกอินและการลงทะเบียน
 router.post("/", (req, res) => {
   const {
     action,
@@ -54,13 +59,15 @@ router.post("/", (req, res) => {
               .status(400)
               .json({ success: false, message: "รหัสผ่านไม่ถูกต้อง" });
           }
-          // 🔹 **เก็บ Session**
+
+          // เก็บข้อมูลผู้ใช้ใน session
           req.session.user = {
-            id: user.id,
+            id: user.user_id, // ใช้ user.user_id แทน user.id
             username: user.username,
             role: user.role,
           };
-          // 🔹 **ตั้งค่า Cookie**
+
+          // ตั้งค่า cookie
           res.cookie("sessionId", req.sessionID, { httpOnly: true });
 
           res.json({
@@ -112,6 +119,7 @@ router.post("/", (req, res) => {
             [username, fname, lname, email, hashedPassword, status, phone],
             function (err) {
               if (err) {
+                console.error("Error inserting user:", err); // Log ข้อผิดพลาด
                 return res.status(500).json({
                   success: false,
                   message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",

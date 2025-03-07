@@ -1,12 +1,17 @@
 const express = require("express");
-const sqlite3 = require('sqlite3').verbose();
 const router = express.Router();
 const db = require("../config/database"); // นำเข้า database.js
 
-// ดึงข้อมูลบิลทั้งหมด
+// ดึงข้อมูลบิลเฉพาะผู้ใช้ที่ล็อกอิน
 router.get('/', (req, res) => {
+    // ตรวจสอบค่า req.session.user.id
+    console.log("User ID from session:", req.session.user.id);
+
+    const userId = req.session.user.id; // ไอดีของผู้ใช้ที่ล็อกอิน
+
     const sql = `
-        SELECT 
+        SELECT
+            user_id,
             bill_id, 
             billing_cycle, 
             rent, 
@@ -19,13 +24,15 @@ router.get('/', (req, res) => {
                 WHEN 'overdue' THEN 'ค้างชำระ'
                 WHEN 'rejected' THEN 'ปฏิเสธ'
             END AS status 
-        FROM bills;
+        FROM bills
+        WHERE user_id = ?;  -- กรองข้อมูลเฉพาะ user_id ที่ล็อกอิน
     `;
 
-    db.all(sql, [], (err, rows) => {
+    db.all(sql, [userId], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
+        console.log(rows);
         res.render('payment', { data: rows });
     });
 });

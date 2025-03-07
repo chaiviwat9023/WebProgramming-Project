@@ -33,11 +33,6 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
-// Routes สำหรับหน้าหลัก, ต้องล็อกอินก่อน
-app.get("/management", isAuthenticated, (req, res) => {
-  res.render("management"); // ไม่ต้องส่ง user ไปซ้ำ เพราะเราใช้ res.locals แล้ว
-});
-
 // เปลี่ยนให้ /login ไม่ต้องใช้ isAuthenticated เพราะผู้ใช้ยังไม่ล็อกอิน
 app.get("/login", (req, res) => {
   if (req.session.user) {
@@ -47,28 +42,12 @@ app.get("/login", (req, res) => {
   res.render("login"); // ถ้าไม่ล็อกอิน ให้แสดงหน้า login
 });
 
-app.get("/home", isAuthenticated, (req, res) => {
-  res.render("home");
-});
-
-app.get("/notify", isAuthenticated, (req, res) => {
-  res.render("notify");
-});
-
-app.get("/history", isAuthenticated, (req, res) => {
-  res.render("history");
-});
-
-app.get("/payment", isAuthenticated, (req, res) => {
-  res.render("payment");
-});
-
 app.get("/logout", (req, res) => {
-    // Destroy the session and redirect to the login page
-    req.session.destroy(() => {
-        res.clearCookie("sessionId");
-        res.redirect("/choose");
-    });
+  // Destroy the session and redirect to the login page
+  req.session.destroy(() => {
+    res.clearCookie("sessionId");
+    res.redirect("/choose");
+  });
 });
 
 // ตั้งค่า middleware สำหรับอ่าน JSON
@@ -94,13 +73,13 @@ const notifyRoutes = require("./routes/notify");
 // ใช้งาน routes
 app.use("/", chooseRoutes);
 app.use("/choose", chooseRoutes);
-app.use("/home", homeRoutes);
-app.use("/rent", rentRoutes);
-app.use("/payment", paymentRoutes);
-app.use("/history", historyRoutes);
+app.use("/home", isAuthenticated, homeRoutes);
+app.use("/rent", isAuthenticated, rentRoutes);
+app.use("/payment", isAuthenticated, paymentRoutes);
+app.use("/history", isAuthenticated, historyRoutes);
 app.use("/login", loginRoutes);
-app.use("/management", managementRoutes);
-app.use("/notify", notifyRoutes);
+app.use("/management", isAuthenticated, managementRoutes);
+app.use("/notify", isAuthenticated, notifyRoutes);
 
 // Management import routes
 const editRoomRoutes = require("./routes/edit-room");
@@ -109,10 +88,10 @@ const reportBillRoutes = require("./routes/approve-bill");
 const reportBookingRoutes = require("./routes/approve-booking");
 
 // Management ใช้งาน routes
-app.use("/edit-room", editRoomRoutes);
-app.use("/report-expenses", reportExpenseRoutes);
-app.use("/approve-bill", reportBillRoutes);
-app.use("/approve-booking", reportBookingRoutes);
+app.use("/edit-room", isAuthenticated, editRoomRoutes);
+app.use("/report-expenses", isAuthenticated, reportExpenseRoutes);
+app.use("/approve-bill", isAuthenticated, reportBillRoutes);
+app.use("/approve-booking", isAuthenticated, reportBookingRoutes);
 
 // เปิดเซิร์ฟเวอร์
 const PORT = 3000;

@@ -3,21 +3,28 @@ const router = express.Router();
 const db = require("../config/database"); // นำเข้า database.js
 
 router.get('/', (req, res) => {
+    // ตรวจสอบค่า req.session.user.id
+    console.log("User ID from session:", req.session.user.id);
+    
+    const userId = req.session.user.id; // ไอดีของผู้ใช้ที่ล็อกอิน
+
     const sql = `
-        SELECT reservation_id, reservation_date, room_id, 
+        SELECT reservation_id, reservation_date, room_id, user_id,
             CASE status 
                 WHEN 'pending' THEN 'รอดำเนินการ' 
                 WHEN 'approved' THEN 'อนุมัติ' 
                 WHEN 'rejected' THEN 'ปฏิเสธ' 
                 WHEN 'canceled' THEN 'ยกเลิก'
             END AS status
-        FROM reservations;
+        FROM reservations
+        WHERE user_id = ?;  -- กรองข้อมูลเฉพาะ user_id ที่ล็อกอิน
     `;
 
-    db.all(sql, [], (err, rows) => {
+    db.all(sql, [userId], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
+        console.log(rows);
         res.render('history', { data: rows });
     });
 });
