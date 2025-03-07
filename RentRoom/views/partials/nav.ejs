@@ -1,74 +1,74 @@
-<nav class="navbar navbar-expand-lg">
-  <div class="collapse navbar-collapse p-1" id="navbarNav">
-    <ul class="navbar-nav ms-auto">
-      <!-- ใช้ ms-auto เพื่อจัดให้อยู่ทางขวา -->
-      <li class="nav-item">
-        <a class="btn btn-outline-primary" href="login">ล็อกอิน</a>
-        <!-- ปุ่ม Login -->
-      </li>
-    </ul>
-  </div>
-</nav>
 
-<!-- Side Bar -->
-<aside>
-  <div class="sidebar" id="sidebar">
-    <ul class="menu list-unstyled">
-      <div class="highlight"></div>
-      <li id="toggleBtn">
-        <a href="#"><i class="bi bi-list"></i></a>
-      </li>
-      <li>
-        <a href="notify"
-          ><i class="bi bi-bell"></i> <span>การแจ้งเตือน</span></a
-        >
-      </li>
-      <li>
-        <a href="home">
-          <i class="bi bi-house"> <span>  หน้าหลัก</span></i>
-        </a>
-      </li>
-      <li class="active">
-        <a href="choose"
-          ><i class="bi bi-door-closed"></i> <span>เลือกห้อง</span></a
-        >
-      </li>
-      <li>
-        <a href="payment"
-          ><i class="bi bi-envelope-paper"></i> <span>ใบแจ้งการชำระ</span></a
-        >
-      </li>
-      <li>
-        <a href="history"
-          ><i class="bi bi-clock"></i> <span>ประวัติการจอง</span></a
-        >
-      </li>
-      <li>
-        <a href="management"><i class="bi bi-gear"></i> <span>ตั้งค่า</span></a>
-      </li>
-    </ul>
-  </div>
-</aside>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="collapse navbar-collapse p-1" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <!-- ใช้ ms-auto เพื่อจัดให้อยู่ทางขวา -->
+        <li class="nav-item">
+          <a class="btn btn-outline-primary" href="login">ล็อกอิน</a>
+          <!-- ปุ่ม Login -->
+        </li>
+      </ul>
+    </div>
+  </nav>
 
+  <!-- Side Bar -->
+  <aside>
+    <div class="sidebar" id="sidebar">
+      <ul class="menu list-unstyled">
+        <div class="highlight"></div>
+        <li id="toggleBtn">
+          <a href="#"><i class="bi bi-list"></i></a>
+        </li>
+        <li>
+          <a href="notify"
+            ><i class="bi bi-bell"></i> <span>การแจ้งเตือน</span></a
+          >
+        </li>
+        <li class="active">
+          <a href="choose"
+            ><i class="bi bi-door-closed"></i> <span>เลือกห้อง</span></a
+          >
+        </li>
+        <li>
+          <a href="home"> <i class="bi bi-house"></i><span>หน้าหลัก</span> </a>
+        </li>
+        <li>
+          <a href="payment"
+            ><i class="bi bi-receipt-cutoff"></i></i> <span>ใบแจ้งการชำระ</span></a
+          >
+        </li>
+        <li>
+          <a href="history"
+            ><i class="bi bi-clock"></i> <span>ประวัติการจอง</span></a
+          >
+        </li>
+        <li>
+          <a href="management"
+            ><i class="bi bi-gear"></i> <span>ตั้งค่า</span></a
+          >
+        </li>
+      </ul>
+    </div>
+  </aside>
+</body>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const menuItems = document.querySelectorAll(".menu li");
+    const menuItems = document.querySelectorAll(".menu li:not(#toggleBtn)");
     const highlight = document.querySelector(".highlight");
 
-    const toggleButton = document.getElementById("toggleBtn"); // ปุ่ม toggle
-    const sidebar = document.querySelector(".sidebar"); // Sidebar container
+    const toggleButton = document.getElementById("toggleBtn");
+    const sidebar = document.querySelector(".sidebar");
 
-    // ทำให้ Sidebar ขยาย/ยุบ
-    toggleButton.addEventListener("click", function () {
-      sidebar.classList.toggle("expanded");
-    });
+
     // อ่านตำแหน่งเมนูที่เลือกจาก localStorage
     const activeIndex = localStorage.getItem("activeMenuIndex");
+
     if (activeIndex) {
       const activeItem = menuItems[activeIndex];
       activeItem.classList.add("active");
       moveHighlight(activeItem);
-      activeItem.querySelector("a").style.color = "white"; // เปลี่ยนสีให้เป็นสีขาว
+      activeItem.querySelector("a").style.color = "white";
     }
 
     function moveHighlight(target) {
@@ -84,12 +84,12 @@
 
         menuItems.forEach((i) => {
           i.classList.remove("active");
-          i.querySelector("a").style.color = ""; // คืนค่าสีเดิม
+          i.querySelector("a").style.color = "";
         });
 
         this.classList.add("active");
         moveHighlight(this);
-        this.querySelector("a").style.color = "white"; // เปลี่ยนสีของ a tag
+        this.querySelector("a").style.color = "white";
 
         // เก็บตำแหน่งของเมนูที่เลือกใน localStorage
         localStorage.setItem("activeMenuIndex", index);
@@ -97,7 +97,7 @@
         // ใช้ setTimeout เพื่อหน่วงการโหลดหน้าใหม่
         setTimeout(() => {
           window.location.href = this.querySelector("a").getAttribute("href"); // ไปที่ href ของเมนูที่เลือก
-        }, 300); // ให้หน่วง 300ms (ให้เวลาการเลื่อนเสร็จ)
+        }, 300);
       });
     });
   });
