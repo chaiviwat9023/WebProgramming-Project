@@ -23,8 +23,9 @@ const managementRoutes = require("./routes/management");
 const notifyRoutes = require("./routes/notify");
 
 // ใช้งาน routes
-app.use("/", homeRoutes);
+app.use("/", chooseRoutes);
 app.use("/choose", chooseRoutes);
+app.use("/home", homeRoutes);
 app.use("/rent", rentRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/history", historyRoutes);

@@ -1,17 +1,100 @@
 <%- include("partials/head") %>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            margin: 0;
+            padding: 20p
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-left: 100px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .stat-card {
+            background: #eef2ff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            margin: 5px;
+        }
+
+        .task-graph {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            height: 50vh;
+        }
+
+
+        .task-list .task-item {
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .schedule {
+            background: #eef2ff;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+
 <body>
 
-    <!-- เรียกใช้ Navbar -->
     <%- include("partials/nav") %>
-
-    <!-- เนื้อหาแต่ละหน้า -->
-    <div class="content">
-        <h2>Welcome to Home Page</h2>
-        <p>This is the home page.</p>
-        <canvas id="myChart" width="400" height="200"></canvas>
+    <div class="dashboard-container">
+        <div class="stats">
+            <div class="stat-card">เดือนที่แล้ว<br><span>08</span></div>
+            <div class="stat-card">เดือนที่ต่ำที่สุด<br><span>10</span></div>
+            <div class="stat-card">เดือนที่สูงสุด<br><span>10</span></div>
+        </div>
+        <div class="text">
+            <h3>ค่าหอพัก</h3>
+        </div>
+        <div class="task-graph">
+            <canvas id="taskChart"></canvas>
+        </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('taskChart').getContext('2d');
+        var taskChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'],
+                datasets: [{
+                    label: 'Tasks Done',
+                    data: [50, 100, 300, 400, 250, 200, 180, 220, 320, 310, 280, 200],
+                    borderColor: '#4f46e5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                    fill: true,
+                }]
+            }
+        });
+    </script>
     <%- include("partials/script") %>
-
 </body>
 </html>
