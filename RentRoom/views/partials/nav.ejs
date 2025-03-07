@@ -1,16 +1,13 @@
+
 <body>
   <nav class="navbar navbar-expand-lg">
     <div class="collapse navbar-collapse p-1" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <% if (session.user) { %>
+        <!-- ใช้ ms-auto เพื่อจัดให้อยู่ทางขวา -->
         <li class="nav-item">
-          <a class="btn btn-outline-danger" href="/logout">ออกจากระบบ</a>
+          <a class="btn btn-outline-primary" href="login">ล็อกอิน</a>
+          <!-- ปุ่ม Login -->
         </li>
-        <% } else { %>
-        <li class="nav-item">
-          <a class="btn btn-outline-primary" id="loginBtn" href="login">ล็อกอิน</a>
-        </li>
-        <% } %>
       </ul>
     </div>
   </nav>
@@ -24,73 +21,75 @@
           <a href="#"><i class="bi bi-list"></i></a>
         </li>
         <li>
-          <a href="notify"><i class="bi bi-bell"></i> <span>การแจ้งเตือน</span></a>
+          <a href="notify"
+            ><i class="bi bi-bell"></i> <span>การแจ้งเตือน</span></a
+          >
         </li>
         <li class="active">
-          <a href="choose"><i class="bi bi-door-closed"></i> <span>เลือกห้อง</span></a>
+          <a href="choose"
+            ><i class="bi bi-door-closed"></i> <span>เลือกห้อง</span></a
+          >
         </li>
         <li>
           <a href="home"> <i class="bi bi-house"></i><span>หน้าหลัก</span> </a>
         </li>
         <li>
-          <a href="payment"><i class="bi bi-receipt-cutoff"></i><span>ใบแจ้งการชำระ</span></a>
+          <a href="payment"
+            ><i class="bi bi-receipt-cutoff"></i></i> <span>ใบแจ้งการชำระ</span></a
+          >
         </li>
         <li>
-          <a href="history"><i class="bi bi-clock"></i> <span>ประวัติการจอง</span></a>
+          <a href="history"
+            ><i class="bi bi-clock"></i> <span>ประวัติการจอง</span></a
+          >
         </li>
         <li>
-          <a href="management"><i class="bi bi-gear"></i> <span>ตั้งค่า</span></a>
+          <a href="management"
+            ><i class="bi bi-gear"></i> <span>ตั้งค่า</span></a
+          >
         </li>
       </ul>
     </div>
   </aside>
 </body>
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const menuItems = document.querySelectorAll(".menu li:not(#toggleBtn)");
     const highlight = document.querySelector(".highlight");
-    const toggleButton = document.getElementById("toggleBtn");
-    const sidebar = document.getElementById("sidebar");
 
-    // ฟังก์ชันในการเลื่อน highlight ไปยังตำแหน่งที่เลือก
-    function moveHighlight(target) {
-      const targetRect = target.getBoundingClientRect(); // ขนาดและตำแหน่งของเมนูที่เลือก
-      const parentRect = target.parentElement.getBoundingClientRect(); // ขนาดและตำแหน่งของ container ของเมนู
-      highlight.style.top = `${targetRect.top - parentRect.top}px`; // เลื่อน highlight ตามตำแหน่งเมนู
-      highlight.style.height = `${targetRect.height}px`; // ให้สูงเท่ากับเมนูที่เลือก
-    }
+    const toggleButton = document.getElementById("toggleBtn");
+    const sidebar = document.querySelector(".sidebar");
+
 
     // อ่านตำแหน่งเมนูที่เลือกจาก localStorage
     const activeIndex = localStorage.getItem("activeMenuIndex");
 
-    // ตรวจสอบว่ามีการเลือกเมนูจาก localStorage หรือไม่
     if (activeIndex) {
       const activeItem = menuItems[activeIndex];
       activeItem.classList.add("active");
-      moveHighlight(activeItem); // เลื่อน highlight ไปยังเมนูที่เลือก
+      moveHighlight(activeItem);
       activeItem.querySelector("a").style.color = "white";
-    } else {
-      // ถ้าไม่มีการเลือกเมนูจาก localStorage ให้เลือกเมนูแรก
-      moveHighlight(menuItems[0]); // เลื่อน highlight ไปยังเมนูแรก
-      menuItems[0].classList.add("active");
-      menuItems[0].querySelector("a").style.color = "white";
+    }
+
+    function moveHighlight(target) {
+      const targetRect = target.getBoundingClientRect();
+      highlight.style.top = `${
+        targetRect.top - target.parentElement.getBoundingClientRect().top
+      }px`;
     }
 
     menuItems.forEach((item, index) => {
       item.addEventListener("click", function (event) {
-        event.preventDefault(); // หยุดการทำงานตามปกติของลิงค์
+        event.preventDefault(); // หยุดการทำงานของ href
 
-        // ลบสถานะ active ออกจากเมนูทั้งหมด
         menuItems.forEach((i) => {
           i.classList.remove("active");
           i.querySelector("a").style.color = "";
         });
 
-        // เพิ่มสถานะ active ให้กับเมนูที่เลือก
         this.classList.add("active");
-        moveHighlight(this); // เลื่อน highlight ไปที่เมนูที่เลือก
-        this.querySelector("a").style.color = "white"; // เปลี่ยนสีของเมนูที่เลือก
+        moveHighlight(this);
+        this.querySelector("a").style.color = "white";
 
         // เก็บตำแหน่งของเมนูที่เลือกใน localStorage
         localStorage.setItem("activeMenuIndex", index);
@@ -100,11 +99,6 @@
           window.location.href = this.querySelector("a").getAttribute("href"); // ไปที่ href ของเมนูที่เลือก
         }, 300);
       });
-    });
-
-    // ฟังก์ชันสำหรับขยายและย่อ sidebar
-    toggleButton.addEventListener("click", function () {
-      sidebar.classList.toggle("collapsed"); // เปลี่ยนสถานะการขยาย/ย่อ
     });
   });
 </script>
