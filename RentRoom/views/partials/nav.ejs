@@ -1,13 +1,17 @@
-
+<%- include("head") %>
 <body>
   <nav class="navbar navbar-expand-lg">
     <div class="collapse navbar-collapse p-1" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <!-- ใช้ ms-auto เพื่อจัดให้อยู่ทางขวา -->
+        <% if (session.user) { %>
+          <li class="nav-item">
+            <a class="btn btn-outline-danger" href="/logout">ออกจากระบบ</a>
+          </li>
+        <% } else { %>
         <li class="nav-item">
-          <a class="btn btn-outline-primary" href="login">ล็อกอิน</a>
-          <!-- ปุ่ม Login -->
+          <a class="btn btn-outline-primary" id="loginBtn" href="login">ล็อกอิน</a>
         </li>
+        <% } %>
       </ul>
     </div>
   </nav>
@@ -18,7 +22,7 @@
       <ul class="menu list-unstyled">
         <div class="highlight"></div>
         <li id="toggleBtn">
-          <a href="#"><i class="bi bi-list"></i></a>
+          <i class="bi bi-list"></i>
         </li>
         <li>
           <a href="notify"
@@ -99,6 +103,11 @@
           window.location.href = this.querySelector("a").getAttribute("href"); // ไปที่ href ของเมนูที่เลือก
         }, 300);
       });
+    });
+
+    // ฟังก์ชันสำหรับขยายและย่อ sidebar
+    toggleButton.addEventListener("click", function () {
+      sidebar.classList.toggle("expanded"); // เปลี่ยนสถานะการขยาย/ย่อ
     });
   });
 </script>
