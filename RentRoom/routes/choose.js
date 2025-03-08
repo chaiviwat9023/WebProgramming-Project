@@ -4,7 +4,8 @@ const db = require("../config/database"); // นำเข้า database.js
 
 // ดึงข้อมูลห้องทั้งหมดจากฐานข้อมูล
 router.get("/", (req, res) => {
-    const query = "SELECT * FROM rooms";  // สมมุติว่า 'rooms' เป็นชื่อตารางห้องพักในฐานข้อมูล
+    // เพิ่มเงื่อนไข WHERE owner_id IS NULL เพื่อดึงเฉพาะห้องที่ไม่มีเจ้าของ
+    const query = "SELECT * FROM rooms WHERE owner_id IS NULL";  
     db.all(query, [], (err, rows) => {
         if (err) {
             console.error(err.message);
