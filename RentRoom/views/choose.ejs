@@ -251,35 +251,48 @@
     
     // ใช้ JavaScript เพื่อจัดการการส่งคำขอและแสดง Alert พร้อมปิด Modal
     document.querySelectorAll('.btn-success').forEach(button => {
-      button.addEventListener('click', async function (event) {
-          event.preventDefault(); // ป้องกันการโหลดหน้าใหม่
-          const url = this.getAttribute('href'); // ดึง URL จากปุ่ม
+    button.addEventListener('click', async function (event) {
+        event.preventDefault(); // ป้องกันการโหลดหน้าใหม่
+        const url = this.getAttribute('href'); // ดึง URL จากปุ่ม
 
-          try {
-              // ส่งคำขอ GET ไปยังเซิร์ฟเวอร์
-              const response = await fetch(url);
-              const result = await response.text(); // รับคำตอบจากเซิร์ฟเวอร์
+        try {
+            // ส่งคำขอ GET ไปยังเซิร์ฟเวอร์
+            const response = await fetch(url);
+            const result = await response.text(); // รับคำตอบจากเซิร์ฟเวอร์
 
-              if (result === "success") {
-                  // แสดง Alert การจองสำเร็จ
-                  alert("การจองห้องสำเร็จ!");
+            if (result === "success") {
+                // แสดง Alert การจองสำเร็จ
+                alert("การจองห้องสำเร็จ!");
 
-                  // ปิด Modal
-                  const modalId = this.closest('.modal').id; // ดึง ID ของ Modal
-                  const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
-                  modal.hide();
-              } else {
-                  alert("กรุณาล็อกอิน");
+                // ปิด Modal
+                const modalId = this.closest('.modal').id; // ดึง ID ของ Modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                modal.hide();
+            } else if (result === "คุณไม่สามารถจองห้องซ้ำได้") {
+                // แสดง Alert เมื่อจองซ้ำ
+                alert("คุณไม่สามารถจองห้องซ้ำได้");
 
-                  const modalId = this.closest('.modal').id; // ดึง ID ของ Modal
-                  const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
-                  modal.hide();
-              }
-          } catch (error) {
-              console.error("Error:", error);
-              alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
-          }
-      });
-  });
+                // ปิด Modal
+                const modalId = this.closest('.modal').id; // ดึง ID ของ Modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                modal.hide();
+            } else if (result === "กรุณาล็อกอิน") {
+                // แสดง Alert เมื่อผู้ใช้ไม่ได้ล็อกอิน
+                alert("กรุณาล็อกอิน");
+
+                // ปิด Modal
+                const modalId = this.closest('.modal').id; // ดึง ID ของ Modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                modal.hide();
+            } else {
+                // แสดง Alert สำหรับข้อผิดพลาดอื่น ๆ
+                alert("เกิดข้อผิดพลาด: " + result);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+        }
+    });
+});
 
   </script>
