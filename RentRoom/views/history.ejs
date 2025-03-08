@@ -12,7 +12,6 @@
         <% } else { %>
             <p class="text-center">คุณยังไม่มีประวัติการจอง</p>
         <% } %>
-
         <div class="table-responsive bg-light p-3 rounded shadow w-75 mx-auto">
             <table class="table table-bordered table-striped table-hover">
                 <thead class="table-dark">
@@ -42,10 +41,13 @@
                                     <% if (item.status === 'อนุมัติ') { %>
                                         <span class="text-secondary fw-bold">คุณได้รับการอนุมัติเเล้ว</span>
                                     <% } else { %>
-                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCancelModal">
+                                        <button class="btn btn-danger btn-sm cancel-booking-btn" 
+                                                data-booking-id="<%= item.reservation_id %>" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#confirmCancelModal">
                                             ยกเลิก
-                                        </button>     
-                                    <% } %>                        
+                                        </button>
+                                    <% } %>
                                 </td>
                             </tr>
                         <% }); %> 
@@ -82,11 +84,51 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        document.getElementById("confirmCancelBtn").addEventListener("click", function () {
-            alert("การจองถูกยกเลิกเรียบร้อยแล้ว!"); // สามารถเปลี่ยนเป็นคำสั่งอื่นได้
-            var modal = bootstrap.Modal.getInstance(document.getElementById('confirmCancelModal'));
-            modal.hide();
+     document.addEventListener("DOMContentLoaded", function () {
+    // ดักจับการกดปุ่ม "ยกเลิกการจอง" จากตาราง
+        document.querySelectorAll(".cancel-booking-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const bookingIdToCancel = this.getAttribute("data-booking-id");
+                console.log("Booking ID to cancel set: ", bookingIdToCancel)
+
+                // กำหนดค่าให้กับปุ่มใน Modal
+                const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+                confirmCancelBtn.setAttribute("data-booking-id", bookingIdToCancel);
+            });
         });
+
+        // ดักจับการคลิกปุ่ม "ยืนยันการยกเลิก" ใน Modal
+        const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+
+        confirmCancelBtn.addEventListener("click", function () {
+            const bookingId = confirmCancelBtn.getAttribute("data-booking-id");
+            console.log("Confirm Cancel clicked with bookingId: ", bookingId);
+
+            if (bookingId) {
+                console.log("Sending DELETE request for booking ID: ", bookingId);
+                fetch(`/history/cancel/${bookingId}`, {
+                    method: "DELETE",
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("การจองถูกยกเลิกเรียบร้อย!");
+                        location.reload(); // โหลดหน้าซ้ำเพื่ออัปเดต UI
+                    } else {
+                        alert("เกิดข้อผิดพลาดในการยกเลิกการจอง");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error in DELETE request:", error);
+                });
+            } else {
+                console.log("No booking ID set!");
+            }
+        });
+    });
+
+
     </script>
+
 </body>
 </html>

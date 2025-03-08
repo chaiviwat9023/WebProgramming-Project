@@ -25,4 +25,21 @@ router.get('/', (req, res) => {
     });
 });
 
+
+// API สำหรับลบการจอง
+router.delete("/cancel/:id", (req, res) => {
+    const reservationId = req.params.id;  // รับค่าจาก URL parameter
+    console.log("ได้รับคำขอยกเลิก:", reservationId);  // Debugging
+
+    const sql = "DELETE FROM reservations WHERE reservation_id = ?";
+    db.run(sql, [reservationId], function (err) {
+        if (err) {
+            console.error("ลบไม่สำเร็จ:", err);
+            return res.status(500).json({ success: false, message: "ลบไม่สำเร็จ" });
+        }
+        console.log("ลบสำเร็จ:", reservationId);
+        res.json({ success: true, message: "ลบเรียบร้อยแล้ว" });
+    });
+});
+
 module.exports = router;
