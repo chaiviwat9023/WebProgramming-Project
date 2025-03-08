@@ -4,12 +4,14 @@
     <div class="collapse navbar-collapse p-1" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <% if (session.user) { %>
-          <li class="nav-item">
-            <a class="btn btn-outline-danger" href="/logout">ออกจากระบบ</a>
-          </li>
+        <li class="nav-item">
+          <a class="btn btn-outline-danger" href="/logout">ออกจากระบบ</a>
+        </li>
         <% } else { %>
         <li class="nav-item">
-          <a class="btn btn-outline-primary" id="loginBtn" href="login">ล็อกอิน</a>
+          <a class="btn btn-outline-primary" id="loginBtn" href="login"
+            >ล็อกอิน</a
+          >
         </li>
         <% } %>
       </ul>
@@ -18,59 +20,51 @@
 
   <!-- Side Bar -->
   <aside>
+    <!-- เช็คสิทธิ์และแสดงเมนูตาม role -->
+    <% if (session.user) { %>
+
     <div class="sidebar" id="sidebar">
       <ul class="menu list-unstyled">
         <div class="highlight"></div>
         <li id="toggleBtn">
           <a><i class="bi bi-list"></i></a>
         </li>
-
+        <% if (session.user.role === 'owner') { %>
+        <!-- เมนู "ตั้งค่า" สำหรับ Owner -->
         <li>
           <a href="choose">
             <i class="bi bi-door-closed"></i> <span>เลือกห้อง</span>
           </a>
         </li>
-        
-        <!-- เช็คสิทธิ์และแสดงเมนูตาม role -->
-        <% if (session.user) { %>
-          <% if (session.user.role === 'owner') { %>
-            <!-- เมนู "ตั้งค่า" สำหรับ Owner -->
-            <li>
-              <a href="management">
-                <i class="bi bi-gear"></i> <span>ตั้งค่า</span>
-              </a>
-            </li>
-          <% } else if (session.user.role === 'tenant') { %>
-            <!-- เมนูที่ User เห็น (ยกเว้น "ตั้งค่า") -->
-            <li>
-              <a href="notify">
-                <i class="bi bi-bell"></i> <span>การแจ้งเตือน</span>
-              </a>
-            </li>
-            <li>
-              <a href="home">
-                <i class="bi bi-house"></i><span>หน้าหลัก</span>
-              </a>
-            </li>
-            <li>
-              <a href="payment">
-                <i class="bi bi-receipt-cutoff"></i> <span>ใบแจ้งการชำระ</span>
-              </a>
-            </li>
-            <li>
-              <a href="history">
-                <i class="bi bi-clock"></i> <span>ประวัติการจอง</span>
-              </a>
-            </li>
-          <% } else { %>
-            <!-- เมนูที่ Guest เห็น (แค่ "เลือกห้อง") -->
-            <li>
-              <a href="choose">
-                <i class="bi bi-door-closed"></i> <span>เลือกห้อง</span>
-              </a>
-            </li>
-          <% } %>
-        <% } %>
+        <li>
+          <a href="management">
+            <i class="bi bi-gear"></i> <span>ตั้งค่า</span>
+          </a>
+        </li>
+        <% } else { %>
+        <!-- เมนูที่ User เห็น (ยกเว้น "ตั้งค่า") -->
+        <li>
+          <a href="notify">
+            <i class="bi bi-bell"></i> <span>การแจ้งเตือน</span>
+          </a>
+        </li>
+        <li>
+          <a href="choose">
+            <i class="bi bi-door-closed"></i> <span>เลือกห้อง</span>
+          </a>
+        </li>
+        <li>
+          <a href="payment">
+            <i class="bi bi-receipt-cutoff"></i> <span>ใบแจ้งการชำระ</span>
+          </a>
+        </li>
+        <li>
+          <a href="history">
+            <i class="bi bi-clock"></i> <span>ประวัติการจอง</span>
+          </a>
+        </li>
+        <% } %> 
+      <% } %>
       </ul>
     </div>
   </aside>
@@ -82,7 +76,6 @@
 
     const toggleButton = document.getElementById("toggleBtn");
     const sidebar = document.querySelector(".sidebar");
-
 
     // อ่านตำแหน่งเมนูที่เลือกจาก localStorage
     const activeIndex = localStorage.getItem("activeMenuIndex");
