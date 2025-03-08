@@ -6,7 +6,12 @@
     <!-- เนื้อหาแต่ละหน้า -->
     <div class="content container-fluid">
         <h2 class="text-center mb-4">📅 ประวัติการจอง</h2>
-        <p class="text-center">ผู้ใช้ <%= data[0].user_id %></p>
+        <!-- ตรวจสอบว่า data มีค่าหรือไม่ -->
+        <% if (data && data.length > 0) { %>
+            <p class="text-center">ผู้ใช้ <%= data[0].user_id %></p>
+        <% } else { %>
+            <p class="text-center">คุณยังไม่มีประวัติการจอง</p>
+        <% } %>
 
         <div class="table-responsive bg-light p-3 rounded shadow w-75 mx-auto">
             <table class="table table-bordered table-striped table-hover">
@@ -20,29 +25,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% data.forEach((item)=>{ %>
-                    <tr>
-                        <td><%= item.reservation_id %></td>
-                        <td><%= item.reservation_date %></td>
-                        <td><%= item.room_id %></td>
-                        <td class="
-                            <%= item.status === 'อนุมัติ' ? 'text-success fw-bold' : 
-                                item.status === 'รอดำเนินการ' ? 'text-warning fw-bold' : 
-                                item.status === 'ปฏิเสธ' ? 'text-danger fw-bold' : 
-                                'text-secondary fw-bold' %>">
-                            <%= item.status %>
-                        </td>
-                        <td>
-                            <% if (item.status === 'อนุมัติ') { %>
-                                <span class="text-secondary fw-bold">คุณได้รับการอนุมัติเเล้ว</span>
-                            <% } else { %>
-                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCancelModal">
-                                ยกเลิก
-                            </button>     
-                            <% } %>                        
-                        </td>
-                    </tr>
-                    <% }); %> 
+                    <% if (data && data.length > 0) { %>
+                        <% data.forEach((item)=>{ %>
+                            <tr>
+                                <td><%= item.reservation_id %></td>
+                                <td><%= item.reservation_date %></td>
+                                <td><%= item.room_id %></td>
+                                <td class="
+                                    <%= item.status === 'อนุมัติ' ? 'text-success fw-bold' : 
+                                        item.status === 'รอดำเนินการ' ? 'text-warning fw-bold' : 
+                                        item.status === 'ปฏิเสธ' ? 'text-danger fw-bold' : 
+                                        'text-secondary fw-bold' %>">
+                                    <%= item.status %>
+                                </td>
+                                <td>
+                                    <% if (item.status === 'อนุมัติ') { %>
+                                        <span class="text-secondary fw-bold">คุณได้รับการอนุมัติเเล้ว</span>
+                                    <% } else { %>
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCancelModal">
+                                            ยกเลิก
+                                        </button>     
+                                    <% } %>                        
+                                </td>
+                            </tr>
+                        <% }); %> 
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5" class="text-center">ไม่มีประวัติการจอง</td>
+                        </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>

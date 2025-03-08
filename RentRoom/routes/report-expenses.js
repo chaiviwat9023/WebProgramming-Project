@@ -24,7 +24,6 @@ router.get("/", (req, res) => {
 
 // 📌 เพิ่มบิลใหม่
 router.post("/", (req, res) => {
-
     // ตรวจสอบหากข้อมูลที่สำคัญหายไป
     const { roomNumber, billingCycle, rent, water, electricity, status } = req.body;
     if (!roomNumber || !billingCycle) {
@@ -35,7 +34,7 @@ router.post("/", (req, res) => {
     const rentAmount = parseFloat(rent) || 0;
     const waterAmount = parseFloat(water) || 0;
     const electricityAmount = parseFloat(electricity) || 0;
-    const billStatus = status || 'pending';
+    const billStatus = status || 'overdue';
 
     const userQuery = "SELECT owner_id FROM rooms WHERE room_id = ?";
     
@@ -55,6 +54,15 @@ router.post("/", (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
 
+        // เพิ่มการแจ้งเตือนไปยังผู้ใช้
+        const insertNotificationSql = `
+            INSERT INTO notifications (user_id, message, status)
+            VALUES (?, ?, 'unread');
+        `;
+
+        // ข้อความแจ้งเตือน
+        const notificationMessage = `คุณได้รับบิลค่าเช่า สำหรับรอบบิล ${billingCycle}`;
+
         // เพิ่มข้อมูลที่ใช้ในการ insert
         console.log("Inserting bill with:", {
             user_id: user.owner_id,
@@ -66,22 +74,35 @@ router.post("/", (req, res) => {
             billStatus
         });
 
-        db.run(insertQuery, [
-            user.owner_id, 
-            roomNumber,
-            billingCycle,
-            rentAmount,
-            waterAmount,
-            electricityAmount,
-            billStatus
-        ], (err) => {
-            if (err) {
-                console.error("SQL Insert Error:", err.code, err.message);
-                return res.status(500).json({ message: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล", error: err.message });
-            }
+        db.serialize(() => {
+            // แทรกข้อมูลบิล
+            db.run(insertQuery, [
+                user.owner_id, 
+                roomNumber,
+                billingCycle,
+                rentAmount,
+                waterAmount,
+                electricityAmount,
+                billStatus
+            ], (err) => {
+                if (err) {
+                    console.error("SQL Insert Error:", err.code, err.message);
+                    return res.status(500).json({ message: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล", error: err.message });
+                }
 
-            console.log("Inserted bill successfully!");
-            res.json({ message: "เพิ่มบิลสำเร็จ!" });
+                console.log("Inserted bill successfully!");
+
+                // แทรกข้อมูลการแจ้งเตือน
+                db.run(insertNotificationSql, [user.owner_id, notificationMessage], (err) => {
+                    if (err) {
+                        console.error("SQL Notification Insert Error:", err.code, err.message);
+                        return res.status(500).json({ message: "เกิดข้อผิดพลาดในการแจ้งเตือน", error: err.message });
+                    }
+
+                    console.log("Notification sent successfully!");
+                    res.json({ message: "เพิ่มบิลและส่งแจ้งเตือนสำเร็จ!" });
+                });
+            });
         });
     });
 });

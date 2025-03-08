@@ -20,6 +20,12 @@ router.post('/', (req, res) => {
         WHERE room_id = ?;
     `;
 
+    // เพิ่มการแจ้งเตือนไปยังผู้ใช้
+    const insertNotificationSql = `
+        INSERT INTO notifications (user_id, message, status)
+        VALUES (?, ?, 'unread');
+    `;
+
     db.serialize(() => {
         db.run(updateReservationSql, [reservation_id], function(err) {
             if (err) {
@@ -31,7 +37,17 @@ router.post('/', (req, res) => {
                     return res.status(500).json({ error: err.message });
                 }
 
-                res.json({ success: true });
+                // สร้างข้อความแจ้งเตือน
+                const notificationMessage = `การจองห้องหมายเลข ${room_id} ของคุณได้รับการอนุมัติแล้ว`;
+
+                // แทรกข้อมูลการแจ้งเตือนลงในตาราง notifications
+                db.run(insertNotificationSql, [user_id, notificationMessage], function(err) {
+                    if (err) {
+                        return res.status(500).json({ error: err.message });
+                    }
+
+                    res.json({ success: true });
+                });
             });
         });
     });
