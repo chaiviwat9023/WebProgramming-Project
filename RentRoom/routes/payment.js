@@ -4,14 +4,12 @@ const db = require("../config/database"); // นำเข้า database.js
 
 // ดึงข้อมูลบิลเฉพาะผู้ใช้ที่ล็อกอิน
 router.get('/', (req, res) => {
-    // ตรวจสอบค่า req.session.user.id
-    console.log("User ID from session:", req.session.user.id);
-
     const userId = req.session.user.id; // ไอดีของผู้ใช้ที่ล็อกอิน
 
     const sql = `
         SELECT
             user_id,
+            room_id,
             bill_id, 
             billing_cycle, 
             rent, 
@@ -32,7 +30,6 @@ router.get('/', (req, res) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        console.log(rows);
         res.render('payment', { data: rows });
     });
 });

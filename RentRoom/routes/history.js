@@ -3,9 +3,6 @@ const router = express.Router();
 const db = require("../config/database"); // นำเข้า database.js
 
 router.get('/', (req, res) => {
-    // ตรวจสอบค่า req.session.user.id
-    console.log("User ID from session:", req.session.user.id);
-    
     const userId = req.session.user.id; // ไอดีของผู้ใช้ที่ล็อกอิน
 
     const sql = `
@@ -24,7 +21,6 @@ router.get('/', (req, res) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        console.log(rows);
         res.render('history', { data: rows });
     });
 });

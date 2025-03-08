@@ -268,7 +268,11 @@
                   const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
                   modal.hide();
               } else {
-                  alert("เกิดข้อผิดพลาดในการจองห้อง");
+                  alert("กรุณาล็อกอิน");
+
+                  const modalId = this.closest('.modal').id; // ดึง ID ของ Modal
+                  const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                  modal.hide();
               }
           } catch (error) {
               console.error("Error:", error);
