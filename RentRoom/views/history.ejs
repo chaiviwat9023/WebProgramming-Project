@@ -85,7 +85,7 @@
 
     <script>
      document.addEventListener("DOMContentLoaded", function () {
-    // ดักจับการกดปุ่ม "ยกเลิกการจอง" จากตาราง
+    // ดักจับการกดปุ่ม "ยกเลิกการจอง" 
         document.querySelectorAll(".cancel-booking-btn").forEach(button => {
             button.addEventListener("click", function () {
                 const bookingIdToCancel = this.getAttribute("data-booking-id");
@@ -96,9 +96,6 @@
                 confirmCancelBtn.setAttribute("data-booking-id", bookingIdToCancel);
             });
         });
-
-        // ดักจับการคลิกปุ่ม "ยืนยันการยกเลิก" ใน Modal
-        const confirmCancelBtn = document.getElementById("confirmCancelBtn");
 
         confirmCancelBtn.addEventListener("click", function () {
             const bookingId = confirmCancelBtn.getAttribute("data-booking-id");
