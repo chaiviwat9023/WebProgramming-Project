@@ -22,21 +22,32 @@
         </ul>
         
         <div class="tab-content mt-3">
+            <!-- Dashboard Tab -->
             <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
-                <%- include("partials/dashboard") %>
+                <%- include("partials/dashboard", {
+                    emptyRooms: emptyRooms,
+                    pendingBills: pendingBills,
+                    pendingReservations: pendingReservations
+                }) %>
             </div>
+        
+            <!-- Edit Room Tab -->
             <div class="tab-pane fade" id="edit-room" role="tabpanel">
                 <%- include("partials/edit-room") %>
             </div>
+        
+            <!-- Report Expenses Tab -->
             <div class="tab-pane fade" id="report-expenses" role="tabpanel">
                 <%- include("partials/report-expenses") %>
             </div>
+        
+            <!-- Approve Booking Tab -->
             <div class="tab-pane fade" id="approve-booking" role="tabpanel">
-                <!-- ส่งข้อมูลไปที่ approve-booking.ejs -->
                 <%- include("partials/approve-booking", { data: reservations }) %>
             </div>
+        
+            <!-- Approve Bill Tab -->
             <div class="tab-pane fade" id="approve-bill" role="tabpanel">
-                <!-- ส่งข้อมูลไปที่ approve-bill.ejs -->
                 <%- include("partials/approve-bill", { data: bills }) %>
             </div>
         </div>

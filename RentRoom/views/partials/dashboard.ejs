@@ -1,42 +1,35 @@
 <div class="container">
-    <h3>Dashboard</h3>
+    <h3 class="mb-4">Dashboard</h3>
     <div class="row">
-        <div class="col-md-3">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">ห้องว่าง</h5>
-                    <h2>12</h2>
+        <!-- ห้องว่าง -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-success shadow-lg h-100">
+                <div class="card-body text-center p-4">
+                    <h5 class="card-title mb-3"><i class="fas fa-door-open fa-2x"></i></h5>
+                    <h2 class="card-text mb-2"><%= emptyRooms %></h2>
                     <p class="card-text">ห้องที่พร้อมให้เช่า</p>
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-3">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">รออนุมัติ</h5>
-                    <h2>5</h2>
+
+        <!-- รออนุมัติ -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-warning shadow-lg h-100">
+                <div class="card-body text-center p-4">
+                    <h5 class="card-title mb-3"><i class="fas fa-clock fa-2x"></i></h5>
+                    <h2 class="card-text mb-2"><%= pendingReservations %></h2>
                     <p class="card-text">ผู้เช่าที่รอการอนุมัติ</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card text-white bg-danger mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">บิลที่รอยืนยัน</h5>
-                    <h2>8</h2>
+        <!-- บิลที่รอยืนยัน -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-danger shadow-lg h-100">
+                <div class="card-body text-center p-4">
+                    <h5 class="card-title mb-3"><i class="fas fa-file-invoice-dollar fa-2x"></i></h5>
+                    <h2 class="card-text mb-2"><%= pendingBills %></h2>
                     <p class="card-text">รายการบิลที่ต้องตรวจสอบ</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">รายรับเดือนนี้</h5>
-                    <h2>฿85,000</h2>
-                    <p class="card-text">ยอดเงินค่าเช่าที่ได้รับ</p>
                 </div>
             </div>
         </div>
